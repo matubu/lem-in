@@ -1,27 +1,27 @@
-NAME = lem-in
+Name         = lem_in
+Flags        = -Wall -Wextra -Werror -O3 -include def.h
+Sources      = $(wildcard *.c)
+Dependencies = $(wildcard *.h) Makefile
+Objects      = $(addprefix bin/, $(Sources:.c=.o))
 
-SRCS = main.c parse.c vec.c priority_queue.c utils.c
+all: $(Name)
 
+bin/%.o: %.c $(Dependencies)
+	mkdir -p bin
+	gcc $(Flags) $< -o $@ -c
 
-CC = gcc
+$(Name): $(Objects)
+	gcc $(Flags) $^ -o $@
 
-#FLAGS = -c -Wall -Wextra -Werror
+re: fclean all
 
-OBJS = $(SRCS:.c=.o)
+clean:
+	rm -rf $(Objects)
 
-all : $(NAME)
+fclean:
+	rm -rf $(Name)
 
-$(NAME) : $(OBJS)
-		$(CC) $(OBJS) -o $(NAME)
+run: $(Name)
+	./$(Name)
 
-clean : 
-		rm -rf $(OBJS)
-
-fclean : clean 
-		rm -rf $(NAME)
-
-re : fclean all
-
-bonus : re
-
-.PHONY:	all clean fclean reNAME = push_swap
+.PHONY: all re clean fclean run
