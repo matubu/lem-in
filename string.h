@@ -18,14 +18,6 @@ static inline bool	contains(char *s, char c) {
 	return (false);
 }
 
-static inline bool	eq(char *a, char *b) {
-	while (*a && *a == *b) {
-		++a;
-		++b;
-	}
-	return (*a == *b);
-}
-
 static inline int	int_string_size(int n) {
 	int len = 0;
 
@@ -52,3 +44,7 @@ static inline bool	is_alphanum(char c) {
 static inline bool	is_var(char c) {
 	return (is_alphanum(c) || c == '_');
 }
+
+int greater_str(char *s1, char *s2);
+int less_str(char *s1, char *s2);
+int equal_str(char *s1, char *s2);

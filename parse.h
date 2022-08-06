@@ -1,13 +1,7 @@
 #pragma once
 
 #include "lem_in.h"
-
-typedef struct s_room {
-	char	*name;
-	size_t	id;
-	size_t	x;
-	size_t	y;
-}	t_room;
+#include "room_map.h"
 
 // 0   == StartRoom
 // n-1 == EndRoom

@@ -10,7 +10,7 @@
 void parse_room(t_farm *farm, LineIterator *it, int type) {
 	t_room	*room = smalloc(t_room);
 
-	room->name = next_word(it);
+	/*room->name = */ next_word(it);
 	skip_whitespace(it);
 	room->x = next_sizet(it);
 	skip_whitespace(it);
@@ -26,7 +26,7 @@ void parse_room(t_farm *farm, LineIterator *it, int type) {
 		P_EXPECT(farm->_end == NULL, it, "Duplicate end room");
 		farm->_end = room;
 	}
-	printf("[%s] id=%s x=%zu y=%zu\n", ((char *[]){"Default", "Start", "End"})[type], room->name, room->x, room->y);
+	printf("[%s] id= x=%zu y=%zu\n", ((char *[]){"Default", "Start", "End"})[type], /*room->name,*/ room->x, room->y);
 }
 
 void parse_link(t_farm *farm, LineIterator *it) {
@@ -77,10 +77,10 @@ t_farm *parse_farm(char *filename) {
 				next(&line);
 				LineIterator	next = next_line(&lines);
 				// Room type
-				if (eq(get_ptr(&line), "start")) {
+				if (equal_str(get_ptr(&line), "start")) {
 					P_EXPECT(next.ptr != NULL, &next, "Expected a newline with a room just after \"##start\"");
 					parse_room(farm, &next, StartRoom);
-				} else if (eq(get_ptr(&line), "end")) {
+				} else if (equal_str(get_ptr(&line), "end")) {
 					P_EXPECT(next.ptr != NULL, &next, "Expected a newline with a room just after \"##end\"");
 					parse_room(farm, &next, EndRoom);
 				} else {
