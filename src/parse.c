@@ -63,8 +63,13 @@ void parse_link(t_farm *farm, LineIterator *it) {
 		map_to_room(farm, farm->rooms_map.root);
 
 		// Mode end room to n - 1
-		farm->rooms[farm->nb_rooms - 1]->id = farm->_end->id;
-		farm->_end->id = farm->nb_rooms - 1;
+		t_room *tmp = farm->_end;
+		size_t	id_end = farm->_end->id;
+		size_t	id_swap = farm->nb_rooms - 1;
+		farm->rooms[id_swap]->id = id_end;
+		farm->rooms[id_end]->id = id_swap;
+		farm->rooms[id_end] = farm->rooms[id_swap];
+		farm->rooms[id_swap] = tmp;
 	}
 
 	char	*a = next_word(it);

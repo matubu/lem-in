@@ -37,5 +37,7 @@ void insert_int(int_map *mp, int_pair elem);
 int_node *get_int(int_map *mp, int value);
 void erase_int(int_map *mp, int val);
 int_node *upper_bound_int(int_map *mp, int value);
+int_node *inverse_lower_bound_int(int_map *mp, int value);
+int_node *lower_bound_int(int_map *mp, int value);
 void pop_int(int_map *pq);
 int_node *top_int(int_map *mp);

@@ -130,7 +130,7 @@ void rightLeftRotate_int(int_map *mp, int_node *node) {
 void insertFix_int(int_map *mp, int_node *node) {
 	if (!node->par || !node->par->par) 
 		return;
-	while (node->par && node->par->col == RED) {
+	while (node->par && node->par->col == RED && node->par->par) {
 		int_node *p = node->par, *gp = node->par->par;
 		if (p == gp->left)
 			if (gp->right && gp->right->col == RED) {
@@ -205,7 +205,7 @@ void insert_int(int_map *mp, int_pair elem) {
         }
     }
 	//printf("a\n");
-    //insertFix_int(mp, new);
+    insertFix_int(mp, new);
 	//printf("b\n");
     mp->size++;
 }
@@ -287,6 +287,7 @@ void erase_int(int_map *mp, int val) {
 	mp->size--;
 }
 
+
 int_node *upper_bound_int(int_map *mp, int value) {
     int_node *cur = mp->root;
 	int_node *ret = NULL;
@@ -297,18 +298,33 @@ int_node *upper_bound_int(int_map *mp, int value) {
 		else
 			ret = cur, cur = cur->left;
 	}
+    return ret;
 
-    //while (cur) {
-	    ////printf("[%zu] x=%zu y=%zu\n", cur->value.second.id, cur->value.second.x, cur->value.second.y);
-        //if (mp->cmp(cur->value.first, value)) {
-			//cur = cur->right;
-		//}
-        //else {
-			//ret = cur;
-            //cur = cur->left;
-		//}
-    //}
-	//printf("upper_bound %d : %d\n", value, ret->value.first);
+}
+
+int_node *inverse_lower_bound_int(int_map *mp, int value) {
+    int_node *cur = mp->root;
+	int_node *ret = NULL;
+
+	while (cur) {
+		if (mp->cmp(cur->value.first, value) || value == cur->value.first)
+			ret = cur, cur = cur->right;
+		else
+			cur = cur->left;
+	}
+    return ret;
+}
+
+int_node *lower_bound_int(int_map *mp, int value) {
+    int_node *cur = mp->root;
+	int_node *ret = NULL;
+
+	while (cur) {
+		if (mp->cmp(cur->value.first, value))
+			cur = cur->right;
+		else
+			ret = cur, cur = cur->left;
+	}
     return ret;
 
 }

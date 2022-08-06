@@ -14,6 +14,7 @@
 
 void find_path(vec *graph, int n, int_map *taken, vec *path, int idx) {
 	//printf("__ANTS %d__\n", idx);
+	idx += 42;
 	int_map pq;
 	init_int_map(&pq, less);
 
@@ -74,16 +75,17 @@ void find_path(vec *graph, int n, int_map *taken, vec *path, int idx) {
 		path->at(path->size - i - 1) = tmp;
 	}
 
-	printf("ants %d : ", idx);
-	for (int i = 0; i < path->size; i++) {
-		if (path->at(i) == -1)
-			printf("WAIT");
-		else
-			printf("%d", path->at(i));
-		if (i < path->size - 1)
-			printf(" -> ");
-	}
-	printf("\n");
+	// print paths
+	//printf("ants %d : ", idx);
+	//for (int i = 0; i < path->size; i++) {
+		//if (path->at(i) == -1)
+			//printf("WAIT");
+		//else
+			//printf("%d", path->at(i));
+		//if (i < path->size - 1)
+			//printf(" -> ");
+	//}
+	//printf("\n");
 
 
 	clear_int_map(&pq);
@@ -99,6 +101,20 @@ void print_graph(vec *graph, int n) {
 	}
 }
 
+void print_solution(vec *paths, int m, t_room **rooms) {
+	int f = 1;
+	for (int i = 1; f; i++) {
+
+		f = 0;
+		for (int j = 0; j < m; j++) {
+			if (paths[j].size <= i || paths[j].at(i) == -1) continue;
+			f = 1;
+			printf("L%d-%s ", j + 1, rooms[paths[j].at(i)]->name);
+		}
+		if (f) printf("\n");
+	}
+}
+
 void solve(t_farm *farm) {
 	//room_map *rooms = &farm->rooms;
 
@@ -111,31 +127,35 @@ void solve(t_farm *farm) {
 	int_map taken[n];
 
 
-	printf("number of rooms : %d\n", n);
+	//printf("number of rooms : %d\n", n);
 
-	for (int i = 0; i < n; i++) {
-		init_int_map(taken + i, less);
-		//printf("i : %d\n", i);
-		for (int j = 0; j < n + m + 100; j++)
-			insert_int(taken + i, make_int_pair(j, 0));
-	}
-	printf("TEST\n");
+
+
+	time(({	
+
+		for (int i = 0; i < n; i++) {
+			init_int_map(taken + i, less);
+			//printf("i : %d\n", i);
+			for (int j = 0; j < n + m - 1; j++)
+				insert_int(taken + i, make_int_pair(j, 0));
+		}
+		42;
+	}));
 
 	vec paths[m];
 	for (int i = 0; i < m; i++)
 		init_vec(paths + i, 0, 0);
 
+	time(({
 	for (int i = 0; i < m; i++) {
 		find_path(graph, n, taken, paths + i, i);
 	}
-	//find_path(graph, n, taken, paths, 0);
-	int number_of_moves = 0;
-	for (int i = 0; i < m; i++) {
-		if (paths[i].size - 1 > number_of_moves)
-			number_of_moves = paths[i].size - 1;
-	}
-	printf("number of moves : %d\n", number_of_moves);
+	42;
+}));
+	print_solution(paths, m, farm->rooms);
+
 }
+
 
 
 void	lem_in(char *filename) {

@@ -28,6 +28,8 @@ if (node) { \
 
 # define at(i) arr[i]
 
+#define INF 2147483647
+
 # define BLACK 0
 # define RED 1
 
