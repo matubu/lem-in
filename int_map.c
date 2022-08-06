@@ -49,13 +49,32 @@ void clear_int_map(int_map *mp) {
     mp->size = 0;
 }
 
-int_node *front_int(int_map *mp) {
+int_node *top_int(int_map *mp) {
     if (!mp->root)
         return NULL;
     int_node *cur = mp->root;
     while (cur->left)
         cur = cur->left; 
     return cur;
+}
+
+void pop_int(int_map *pq) {
+    int_node *cur = top_int(pq);
+
+    if (!cur)
+        return ;
+    if (cur == pq->root) {
+        pq->root = pq->root->right;
+        if (pq->root)
+            pq->root->par = NULL;
+    }
+    else {
+        cur->par->left = cur->right;
+        if (cur->right)
+            cur->right->par = cur->par;
+    }
+    free(cur);
+    pq->size--;
 }
 
 
@@ -156,6 +175,7 @@ void insertFix_int(int_map *mp, int_node *node) {
 void insert_int(int_map *mp, int_pair elem) {
     int_node *new = new_int_node(elem, 1);
     if (!new) {
+		printf("PROBLEMO\n");
         clear_int_map(mp);
         return ;
     }
@@ -164,7 +184,7 @@ void insert_int(int_map *mp, int_pair elem) {
         mp->root = new;
     } else {
         int_node *cur = mp->root;
-        while (1) {
+        while (cur) {
             if (mp->cmp(new->value.first, cur->value.first)) {
                 if (cur->left)
                     cur = cur->left;
@@ -184,8 +204,113 @@ void insert_int(int_map *mp, int_pair elem) {
             }
         }
     }
-    insertFix_int(mp, new);
+	//printf("a\n");
+    //insertFix_int(mp, new);
+	//printf("b\n");
     mp->size++;
+}
+					
+
+int_node *predecessor(int_node *node) {
+	if (!node || !node->left)
+		return (NULL);
+	node = node->left;
+	while (node->right)
+		node = node->right;
+	return node;
+}
+
+void transplant(int_map *mp, int_node *u, int_node *v) {
+	if (!u->par)
+		mp->root = v;
+	else if (u == u->par->left)
+		u->par->left = v;
+	else
+		u->par->right = v;
+	if (v)
+		v->par = u->par;
+}
+
+void erase_int(int_map *mp, int val) {
+	int_node *node = mp->root;
+
+	while (node && node->value.first != val)
+		node = (mp->cmp(val, node->value.first) ? node->left : node->right);
+
+	if (!node)
+		return ;
+
+	int_node *x, *y, *dummy = NULL;
+	int original_col = node->col;
+
+	if (!node->left && !node->right) {
+		dummy = new_int_node(make_int_pair(0, 0), 0);
+		transplant(mp, node, dummy);
+		x = dummy;
+	} else if (!node->left) {
+		transplant(mp, node, node->right);
+		x = node->right;
+	} else if (!node->right) {
+		transplant(mp, node, node->left);
+		x = node->left;
+	} else {
+		y = predecessor(node);
+		x = y->left;
+		if (!x) {
+			dummy = new_int_node(make_int_pair(0, 0), 0);
+			dummy->col = BLACK;
+			dummy->par = y;
+			y->left = dummy;
+			x = dummy;
+		}
+		original_col = y->col;
+		if (y->par != node) {
+			transplant(mp, y, x);
+			y->left = node->left;
+			if (y->left)
+				y->left->par = y;
+		}
+		transplant(mp, node, y);
+		y->col = node->col;
+		y->right = node->right;
+		if (y->right)
+			y->right->par = y;
+	}
+
+	if (dummy) {
+		transplant(mp, dummy, NULL);
+		//free(dummy);
+	}
+
+	//free(node);
+
+	mp->size--;
+}
+
+int_node *upper_bound_int(int_map *mp, int value) {
+    int_node *cur = mp->root;
+	int_node *ret = NULL;
+
+	while (cur) {
+		if (mp->cmp(cur->value.first, value) || value == cur->value.first)
+			cur = cur->right;
+		else
+			ret = cur, cur = cur->left;
+	}
+
+    //while (cur) {
+	    ////printf("[%zu] x=%zu y=%zu\n", cur->value.second.id, cur->value.second.x, cur->value.second.y);
+        //if (mp->cmp(cur->value.first, value)) {
+			//cur = cur->right;
+		//}
+        //else {
+			//ret = cur;
+            //cur = cur->left;
+		//}
+    //}
+	//printf("upper_bound %d : %d\n", value, ret->value.first);
+    return ret;
+
 }
 
 int_node *get_int(int_map *mp, int value) {

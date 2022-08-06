@@ -12,146 +12,143 @@
 	tmp; \
 })
 
+void find_path(vec *graph, int n, int_map *taken, vec *path, int idx) {
+	//printf("__ANTS %d__\n", idx);
+	int_map pq;
+	init_int_map(&pq, less);
+
+	vec vis;
+	init_vec(&vis, n, 0);
+
+	int_map from;
+	init_int_map(&from, less);
+
+	vec costs;
+	init_vec(&costs, n, 2147483647);
+	costs.at(0) = 0;
+
+	insert_int(&pq, make_int_pair(0, 0));
+	while (pq.size) {
+		int_pair cur = top_int(&pq)->value;
+		pop_int(&pq);
+		vis.at(cur.second) = 1;
+		for (int i = graph[cur.second].size - 1; i >= 0; i--) {
+			int v = graph[cur.second].at(i);
+			if (vis.at(v))
+				continue;
+			int cost = upper_bound_int(taken + v, cur.first)->value.first;
+			if (cost > costs.at(v))
+				continue;
+			costs.at(v) = cost;
+			insert_int(&pq, make_int_pair(cost, v));
+			erase_int(&from, v);
+			insert_int(&from, make_int_pair(v, cur.second));
+		}
+	}
+
+	int cur = n - 1;
+	int turn = costs.at(cur);
+	while (1) {
+		while (turn > costs.at(cur)) {
+			push_back(path, -1);
+			turn--;
+
+		}
+		if (cur != n - 1) {
+			erase_int(taken + cur, costs.at(cur));
+		}
+
+		push_back(path, cur);
+
+		int_node *prev = get_int(&from, cur);
+		if (cur == 0)
+			break;
+		cur = prev->value.second;
+		turn--;
+	}
+
+	// reverse path
+	for (int i = 0; i < path->size / 2; i++) {
+		int tmp = path->at(i);
+		path->at(i) = path->at(path->size - i - 1);
+		path->at(path->size - i - 1) = tmp;
+	}
+
+	printf("ants %d : ", idx);
+	for (int i = 0; i < path->size; i++) {
+		if (path->at(i) == -1)
+			printf("WAIT");
+		else
+			printf("%d", path->at(i));
+		if (i < path->size - 1)
+			printf(" -> ");
+	}
+	printf("\n");
+
+
+	clear_int_map(&pq);
+}
+
+void print_graph(vec *graph, int n) {
+	for (int i = 0; i < n; i++) {
+		printf("%d : ", i);
+		for (int j = 0; j < graph[i].size; j++) {
+			printf("%d ", graph[i].at(j));
+		}
+		printf("\n");
+	}
+}
+
+void solve(t_farm *farm) {
+	//room_map *rooms = &farm->rooms;
+
+	vec *graph = farm->graph;
+	//print_graph(graph, farm->nb_rooms);
+
+	int n = farm->nb_rooms;
+	int m = farm->nb_ants;
+
+	int_map taken[n];
+
+
+	printf("number of rooms : %d\n", n);
+
+	for (int i = 0; i < n; i++) {
+		init_int_map(taken + i, less);
+		//printf("i : %d\n", i);
+		for (int j = 0; j < n + m + 100; j++)
+			insert_int(taken + i, make_int_pair(j, 0));
+	}
+	printf("TEST\n");
+
+	vec paths[m];
+	for (int i = 0; i < m; i++)
+		init_vec(paths + i, 0, 0);
+
+	for (int i = 0; i < m; i++) {
+		find_path(graph, n, taken, paths + i, i);
+	}
+	//find_path(graph, n, taken, paths, 0);
+	int number_of_moves = 0;
+	for (int i = 0; i < m; i++) {
+		if (paths[i].size - 1 > number_of_moves)
+			number_of_moves = paths[i].size - 1;
+	}
+	printf("number of moves : %d\n", number_of_moves);
+}
+
+
 void	lem_in(char *filename) {
 	t_farm	*farm = time(parse_farm(filename));
 
-	// Algo goes gere
+	solve(farm);	
 
 	free_farm(farm);
 }
 
-
-//int	main(int argc, char **argv) {
-	//if (argc < 2) {
-		//lem_in("map/simple");
-		//return (0);
-	//}
-	//for (int i = 1; i < argc; ++i) {
-		//lem_in(argv[i]);
-	//}
-//}
-
-int main() {
-	//srand(time(NULL));
-	int_map mp[4000];
-	for (int i = 0; i < 4000; i++)
-		init_int_map(&mp[i], less);
-	for (int j = 0; j < 4000; j++) {
-		for (int i = 0; i < 5000; i++) {
-			insert_int(&mp[j], make_int_pair(rand(), 42));
-		}
-	}
-	//insert_room(&mp, make_room_pair("pouet", (t_room){.id = 0, .x = 1, .y = 1}));
-
-
-	//for (int i = 0; i < 1000000; i++) {
-		//insert_room(&mp, make_room_pair(str, (t_room){.id = 0, .x = 1, .y = 1}));
-		//str[0] = rand()%127 + 1;
-		//str[1] = rand()%127 + 1;
-		//str[2] = rand()%127 + 1;
-		//str[3] = rand()%127 + 1;
-		//str[4] = rand()%127 + 1;
-		//str[5] = rand()%127 + 1;
-	//}
-	//insert_room(&mp, make_room_pair("plop", (t_room){.id = 42, .x = 1, .y = 1}));
-
-	//room_node *room = get_room(&mp, "pouet");
-	//printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
-
-	printf("done");
-	//room_node *room = get_room(&mp[0], "plop");
-	//if (room)
-		//printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
-	//else
-		//printf("not found\n");
+int main(int ac, char **av) {
+	if (ac == 2)
+		lem_in(av[1]);
+	else
+		lem_in("map/simple");
 }
-
-// int main() {
-
-//     // (n + m) * n * m
-//     // m * n + n * taken[i].size * m 
-
-//     int n, m;
-//     vec graph[n];
-
-//     for (int i = 0; i < n; i++)
-//         init_vec(&graph[i], 0, 0);
-
-//     vec taken[n];
-//     for (int i = 0; i < n; i++)
-//         init_vec(&taken[i], 0, 0);
-
-//     for (int i = 0; i < 10; i++) {
-//         if (!push_back(&v, i))
-//             return 1;
-//         printf("v[%d] = %d\n", i, v.at(i));
-//     }
-
-//     while (v.size) {
-//         printf("back : %d\n", v.at(v.size - 1));
-//         pop_back(&v);
-//     }
-
-
-
-
-
-//     return 0;
-//     srand(time(NULL));
-//     priority_queue pq;
-//     init_priority_queue(&pq, greater);
-
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-//     push(&pq, make_pair(1, 1));
-
-//     put_node(pq.root);
-//     printf("\n");
-
-//     while (pq.size) {
-//         pop(&pq); 
-//         printf("%d\n", pq.size);
-//     }
-//     put_node(pq.root);
-//     printf("\n");
-
-//     for (int i = 0 ; i < 10; i++) {
-//         if (rand() % 10) {
-//             printf("push\n");
-//             push(&pq, make_pair(rand() % 100, rand() % 100));
-//         }
-//         else {
-//             printf("pop\n");
-//             pop(&pq);
-//         }
-//         put_node(top(&pq)); 
-//         printf("\n");
-//         printf("pq.size = %d\n", pq.size);
-//     }
-
-//     clear_priority_queue(&pq);
-//     put_node(top(&pq)); 
-//     printf("\n");
-//     printf("pq.size = %d\n", pq.size);
-
-//     for (int i = 0 ; i < 10; i++) {
-//         if (rand() % 10) {
-//             printf("push\n");
-//             push(&pq, make_pair(rand() % 100, rand() % 100));
-//         }
-//         else {
-//             printf("pop\n");
-//             pop(&pq);
-//         }
-//         put_node(top(&pq)); 
-//         printf("\n");
-//         printf("pq.size = %d\n", pq.size);
-//     }
-// }
