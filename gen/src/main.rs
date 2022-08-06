@@ -1,5 +1,6 @@
 extern crate rand;
 
+use rand::Rng;
 use std::io::Write;
 
 fn input(varname: &str, min: usize) -> usize {
@@ -30,19 +31,24 @@ fn main() {
 	let nb_links = input("links", 1);
 
 	println!("{nb_ants}");
-	for i in (0..nb_rooms) {
+	for i in 0..nb_rooms {
 		match i {
 			0 => println!("##start"),
 			1 => println!("##end"),
 			_ => ()
 		};
-		println("{i} 0 0");
+		println!("{i} 0 0");
 	}
-	for i in (0..nb_links) {
-		let a: usize = rand::random();
-		while (a == b) {
-
+	let mut rng = rand::thread_rng();
+	for _ in 0..nb_links {
+		let a: usize = rng.gen_range(0..nb_rooms);
+		let mut b: usize;
+		loop {
+			b = rng.gen_range(0..nb_rooms);
+			if a != b {
+				break ;
+			}
 		}
-		println("{rand}-{}");
+		println!("{a}-{b}");
 	}
 }

@@ -1,0 +1,6 @@
+[package]
+name = "lem-in-gen"
+version = "0.0.1"
+
+[dependencies]
+rand = "0.8.4"
