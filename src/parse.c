@@ -69,12 +69,16 @@ void parse_link(t_farm *farm, LineIterator *it) {
 
 	char	*a = next_word(it);
 	P_EXPECT(get(it) == '-', it, "The name of a room can only contains those characters: [a-zA-Z0-9_]");
+	room_node	*node_a = get_room(&farm->rooms_map, a);
+	P_EXPECT(node_a, it, "No such variable");
 	next(it);
 	char	*b = next_word(it);
 	P_EXPECT(get(it) == '\0', it, "Expected eol");
+	room_node	*node_b = get_room(&farm->rooms_map, b);
+	P_EXPECT(node_b, it, "No such variable");
 
-	size_t	id_a = get_room(&farm->rooms_map, a)->value.second.id;
-	size_t	id_b = get_room(&farm->rooms_map, b)->value.second.id;
+	size_t	id_a = node_a->value.second.id;
+	size_t	id_b = node_b->value.second.id;
 	push_back(farm->graph + id_a, id_b);
 	push_back(farm->graph + id_b, id_a);
 
