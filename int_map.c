@@ -1,24 +1,26 @@
-#include "room_map.h"
+#include "int_map.h"
 
 
 /*
-typedef struct s_room {
+typedef struct s_int {
 	size_t	id;
 	size_t	x;
 	size_t	y;
-}	t_room;
+}	t_int;
 */
 
 
-room_pair make_room_pair(char *first, t_room second) {
-    room_pair p;
+int_pair make_int_pair(int first, int second) {
+    int_pair p;
     p.first = first;
     p.second = second;
     return p;
 }
 
-room_node *new_room_node(room_pair value, int col) {
-    room_node *n = malloc(sizeof(room_node));
+int_node *new_int_node(int_pair value, int col) {
+    int_node *n = malloc(sizeof(int_node));
+    if (!n)
+        return NULL;
     n->value = value;
     n->col = col;
     n->par = NULL;
@@ -27,30 +29,30 @@ room_node *new_room_node(room_pair value, int col) {
     return n;
 }
 
-void init_room_map(room_map *mp, int (*cmp)(char *, char *)) {
+void init_int_map(int_map *mp, int (*cmp)(int, int)) {
     mp->root = NULL;
     mp->size = 0;
     mp->cmp = cmp;
 }
 
-void clear_room_node(room_node *n) {
+void clear_int_node(int_node *n) {
     if (!n)
         return ;
-    clear_room_node(n->left);
-    clear_room_node(n->right);
+    clear_int_node(n->left);
+    clear_int_node(n->right);
     free(n);
 }
 
-void clear_room_map(room_map *mp) {
-    clear_room_node(mp->root);
+void clear_int_map(int_map *mp) {
+    clear_int_node(mp->root);
     mp->root = NULL;
     mp->size = 0;
 }
 
-room_node *front_room(room_map *mp) {
+int_node *front_int(int_map *mp) {
     if (!mp->root)
         return NULL;
-    room_node *cur = mp->root;
+    int_node *cur = mp->root;
     while (cur->left)
         cur = cur->left; 
     return cur;
@@ -58,10 +60,10 @@ room_node *front_room(room_map *mp) {
 
 
 
-void	leftRotate(room_map *mp, room_node *node) {
+void	leftRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->right)
 		return ;
-	room_node *y = node->right;
+	int_node *y = node->right;
 	node->right = y->left;
 	if (y->left)
 		y->left->par = node;
@@ -76,10 +78,10 @@ void	leftRotate(room_map *mp, room_node *node) {
 	y->left = node;
 }
 
-void	rightRotate(room_map *mp, room_node *node) {
+void	rightRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->left)
 		return ;
-	room_node *y = node->left;
+	int_node *y = node->left;
 	node->left = y->right;
 	if (y->right)
 		y->right->par = node;
@@ -94,23 +96,23 @@ void	rightRotate(room_map *mp, room_node *node) {
 	y->right = node;
 }
 
-void leftRightRotate(room_map *mp, room_node *node) {
+void leftRightRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->left || !node->left->right)
 		return ;
-	leftRotate(mp, node->left);
+	leftRotate_int(mp, node->left);
 }
 
-void rightLeftRotate(room_map *mp, room_node *node) {
+void rightLeftRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->right || !node->right->left)
 		return ;
-	rightRotate(mp, node->right);
+	rightRotate_int(mp, node->right);
 }
 
-void insertFix(room_map *mp, room_node *node) {
+void insertFix_int(int_map *mp, int_node *node) {
 	if (!node->par || !node->par->par) 
 		return;
 	while (node->par && node->par->col == RED) {
-		room_node *p = node->par, *gp = node->par->par;
+		int_node *p = node->par, *gp = node->par->par;
 		if (p == gp->left)
 			if (gp->right && gp->right->col == RED) {
 				gp->right->col = BLACK;
@@ -120,12 +122,12 @@ void insertFix(room_map *mp, room_node *node) {
 			} else {
 				if (node == p->right) {
 					node = p;
-					leftRotate(mp, node);
+					leftRotate_int(mp, node);
 				}
 				if (node->par->par) { 
 					node->par->col = BLACK;
 					node->par->par->col = RED;
-					rightRotate(mp, node->par->par);
+					rightRotate_int(mp, node->par->par);
 				}
 			} else {
 				if (gp->left && gp->left->col == RED) {
@@ -136,12 +138,12 @@ void insertFix(room_map *mp, room_node *node) {
 				} else {
 					if (node == p->left) {
 						node = p;
-						rightRotate(mp, node);
+						rightRotate_int(mp, node);
 					}
 					if (node->par->par) {
 						node->par->col = BLACK;
 						node->par->par->col = RED;
-						leftRotate(mp, node->par->par);
+						leftRotate_int(mp, node->par->par);
 					}
 				}
 			}
@@ -151,14 +153,17 @@ void insertFix(room_map *mp, room_node *node) {
 	mp->root->col = BLACK;
 }
 
-room_node *insert_room(room_map *mp, room_pair elem) {
-    room_node *new = new_room_node(elem, 1);
-
+void insert_int(int_map *mp, int_pair elem) {
+    int_node *new = new_int_node(elem, 1);
+    if (!new) {
+        clear_int_map(mp);
+        return ;
+    }
     if (!mp->root) {
         new->col = 0;
         mp->root = new;
     } else {
-        room_node *cur = mp->root;
+        int_node *cur = mp->root;
         while (1) {
             if (mp->cmp(new->value.first, cur->value.first)) {
                 if (cur->left)
@@ -179,17 +184,16 @@ room_node *insert_room(room_map *mp, room_pair elem) {
             }
         }
     }
-    insertFix(mp, new);
+    insertFix_int(mp, new);
     mp->size++;
-	return (new);
 }
 
-room_node *get_room(room_map *mp, char *value) {
-    room_node *cur = mp->root;
+int_node *get_int(int_map *mp, int value) {
+    int_node *cur = mp->root;
 
     while (cur) {
 	    //printf("[%zu] x=%zu y=%zu\n", cur->value.second.id, cur->value.second.x, cur->value.second.y);
-        if (equal_str(cur->value.first, value))
+		if (cur->value.first == value)
             break;
         if (mp->cmp(value, cur->value.first))
             cur = cur->left;
