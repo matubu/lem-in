@@ -28,6 +28,9 @@ if (node) { \
 
 # define at(i) arr[i]
 
+# define BLACK 0
+# define RED 1
+
 typedef struct s_vec {
     int		*arr;
     int		size;
