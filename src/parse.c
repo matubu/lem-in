@@ -46,8 +46,8 @@ void	map_to_room(t_farm *farm, room_node *node) {
 		return ;
 	}
 	map_to_room(farm, node->left);
-	map_to_room(farm, node->right);
 	farm->rooms[node->value.second.id] = &node->value.second;
+	map_to_room(farm, node->right);
 }
 
 void parse_link(t_farm *farm, LineIterator *it) {

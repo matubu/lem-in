@@ -1,14 +1,14 @@
 Name         = lem_in
-#Flags        = -Wall -Wextra -Werror -O3 -include def.h
-Flags = -include def.h
+#Flags        = -Wall -Wextra -Werror -O3 -include src/def.h
+Flags        = -include src/def.h
 Flags       += -fsanitize=address -g
-Sources      = $(wildcard *.c)
-Dependencies = $(wildcard *.h) Makefile
-Objects      = $(addprefix bin/, $(Sources:.c=.o))
+Sources      = $(wildcard src/*.c)
+Dependencies = $(wildcard src/*.h) Makefile
+Objects      = $(patsubst src/%.c,bin/%.o,$(Sources))
 
 all: $(Name)
 
-bin/%.o: %.c $(Dependencies)
+bin/%.o: src/%.c $(Dependencies)
 	mkdir -p bin
 	gcc $(Flags) $< -o $@ -c
 
@@ -18,9 +18,9 @@ $(Name): $(Objects)
 re: fclean all
 
 clean:
-	rm -rf $(Objects)
+	rm -rf bin
 
-fclean:
+fclean: clean
 	rm -rf $(Name)
 
 run: $(Name)
