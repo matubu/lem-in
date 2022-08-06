@@ -1,5 +1,6 @@
 Name         = lem_in
 Flags        = -Wall -Wextra -Werror -O3 -include def.h
+Flags       += -fsanitize=address -g
 Sources      = $(wildcard *.c)
 Dependencies = $(wildcard *.h) Makefile
 Objects      = $(addprefix bin/, $(Sources:.c=.o))

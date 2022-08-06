@@ -21,17 +21,20 @@ void parse_room(t_farm *farm, LineIterator *it, int type) {
 	P_EXPECT(get(it) == '\0', it, "Expected eol");
 
 	++farm->nb_rooms;
-	room.second.id = ++farm->_nb_normal_rooms;
+
+	if (type == StartRoom)
+		room.second.id = 0;
+	else
+		room.second.id = farm->_indexing++;
 
 	room_node *node = insert_room(&farm->rooms, room);
+
 	if (type == StartRoom)
 	{
-		--farm->_nb_normal_rooms;
-		room.second.id = 0;
 		P_EXPECT(farm->_start == NULL, it, "Duplicate start room");
 		farm->_start = &node->value.second;
 	}
-	else if (type == EndRoom)
+	if (type == EndRoom)
 	{
 		P_EXPECT(farm->_end == NULL, it, "Duplicate end room");
 		farm->_end = &node->value.second;
@@ -68,6 +71,8 @@ t_farm *parse_farm(char *filename) {
 	t_farm	*farm = smalloc(t_farm);
 	init_room_map(&farm->rooms, greater_str);
 	farm->graph = NULL;
+	farm->nb_rooms = 0;
+	farm->_indexing = 1;
 	farm->_start = NULL;
 	farm->_end = NULL;
 
@@ -115,8 +120,7 @@ t_farm *parse_farm(char *filename) {
 	P_EXPECT(farm->_start != NULL, &line, "Missing start room");
 	P_EXPECT(farm->_end != NULL, &line, "Missing end room");
 
-	// Swap to get the StartRoom at 0
-	//         and the EndRoom   at n-1
+	// Swap EndRoom to be at n-1
 
 	free_file_iterator(&lines);
 

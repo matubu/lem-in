@@ -74,8 +74,10 @@ static inline char	*next_word(LineIterator *it) {
 	while (is_var(s[len])) {
 		++len;
 	}
+	P_EXPECT(len, it, "Expected a variable");
 	it->idx += len;
 	char *ptr = tmalloc(char, len + 1);
+	ptr[len] = '\0';
 	while (len--)
 		ptr[len] = s[len];
 	return (ptr);

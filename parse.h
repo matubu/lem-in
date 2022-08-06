@@ -11,7 +11,7 @@ typedef struct {
 	size_t		nb_ants;
 	size_t		nb_rooms;
 
-	size_t		_nb_normal_rooms;
+	size_t		_indexing;
 	t_room		*_start;
 	t_room		*_end;
 }	t_farm;

@@ -46,7 +46,7 @@ void	lem_in(char *filename) {
 
 int	main(int argc, char **argv) {
 	if (argc < 2) {
-		lem_in("map/simple");
+		lem_in("map/complexe");
 		return (0);
 	}
 	for (int i = 1; i < argc; ++i) {
