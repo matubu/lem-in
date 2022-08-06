@@ -54,7 +54,7 @@ void parse_link(t_farm *farm, LineIterator *it) {
 	if (farm->graph == NULL) {
 		// Init graph
 		farm->graph = tmalloc(vec, farm->nb_rooms);
-		for (int i = 0; i < farm->nb_rooms; ++i) {
+		for (size_t i = 0; i < farm->nb_rooms; ++i) {
 			init_vec(farm->graph + i, 0, 0);
 		}
 

@@ -1,6 +1,6 @@
 Name         = lem_in
-#Flags        = -Wall -Wextra -Werror -O3 -include src/def.h
-Flags        = -include src/def.h
+Flags        = -Wall -Wextra -Werror -O3 -include src/def.h
+# Flags        = -include src/def.h
 Flags       += -fsanitize=address -g
 Sources      = $(wildcard src/*.c)
 Dependencies = $(wildcard src/*.h) Makefile
