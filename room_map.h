@@ -1,14 +1,15 @@
 #include "lem_in.h"
 
 typedef struct s_room {
+	char	*name;
 	size_t	id;
 	size_t	x;
 	size_t	y;
 }	t_room;
 
 typedef struct s_room_pair {
-    char *first;
-    t_room second;
+    char	*first;
+    t_room	second;
 } room_pair;
 
 

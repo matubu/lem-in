@@ -13,7 +13,7 @@ void parse_room(t_farm *farm, LineIterator *it, int type) {
 
 	room_pair	room;
 
-	room.first = next_word(it);
+	room.first = room.second.name = next_word(it);
 	skip_whitespace(it);
 	room.second.x = next_sizet(it);
 	skip_whitespace(it);
@@ -27,7 +27,7 @@ void parse_room(t_farm *farm, LineIterator *it, int type) {
 	else
 		room.second.id = farm->_indexing++;
 
-	room_node *node = insert_room(&farm->rooms, room);
+	room_node *node = insert_room(&farm->rooms_map, room);
 
 	if (type == StartRoom)
 	{
@@ -41,12 +41,30 @@ void parse_room(t_farm *farm, LineIterator *it, int type) {
 	}
 }
 
+void	map_to_room(t_farm *farm, room_node *node) {
+	if (!node) {
+		return ;
+	}
+	map_to_room(farm, node->left);
+	map_to_room(farm, node->right);
+	farm->rooms[node->value.second.id] = &node->value.second;
+}
+
 void parse_link(t_farm *farm, LineIterator *it) {
 	if (farm->graph == NULL) {
-		farm->graph = tmalloc(vec, farm->rooms.size);
-		for (int i = 0; i < farm->rooms.size; ++i) {
+		// Init graph
+		farm->graph = tmalloc(vec, farm->nb_rooms);
+		for (int i = 0; i < farm->nb_rooms; ++i) {
 			init_vec(farm->graph + i, 0, 0);
 		}
+
+		// Generate (id -> room) table
+		farm->rooms = tmalloc(t_room *, farm->nb_rooms);
+		map_to_room(farm, farm->rooms_map.root);
+
+		// Mode end room to n - 1
+		farm->rooms[farm->nb_rooms - 1]->id = farm->_end->id;
+		farm->_end->id = farm->nb_rooms - 1;
 	}
 
 	char	*a = next_word(it);
@@ -55,8 +73,8 @@ void parse_link(t_farm *farm, LineIterator *it) {
 	char	*b = next_word(it);
 	P_EXPECT(get(it) == '\0', it, "Expected eol");
 
-	size_t	id_a = get_room(&farm->rooms, a)->value.second.id;
-	size_t	id_b = get_room(&farm->rooms, b)->value.second.id;
+	size_t	id_a = get_room(&farm->rooms_map, a)->value.second.id;
+	size_t	id_b = get_room(&farm->rooms_map, b)->value.second.id;
 	push_back(farm->graph + id_a, id_b);
 	push_back(farm->graph + id_b, id_a);
 
@@ -69,7 +87,7 @@ t_farm *parse_farm(char *filename) {
 	FileIterator	lines = create_file_iterator(filename);
 
 	t_farm	*farm = smalloc(t_farm);
-	init_room_map(&farm->rooms, greater_str);
+	init_room_map(&farm->rooms_map, greater_str);
 	farm->graph = NULL;
 	farm->nb_rooms = 0;
 	farm->_indexing = 1;
@@ -82,7 +100,7 @@ t_farm *parse_farm(char *filename) {
 	farm->nb_ants = next_sizet(&line);
 	P_EXPECT(get(&line) == '\0', &line, "Expected eol, should only contains the number of ants");
 
-	// Parse rooms and links
+	// Parse rooms_map and links
 	while (!is_it_end(&lines)) {
 		line = next_line(&lines);
 
@@ -119,8 +137,6 @@ t_farm *parse_farm(char *filename) {
 
 	P_EXPECT(farm->_start != NULL, &line, "Missing start room");
 	P_EXPECT(farm->_end != NULL, &line, "Missing end room");
-
-	// Swap EndRoom to be at n-1
 
 	free_file_iterator(&lines);
 

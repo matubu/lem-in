@@ -5,12 +5,18 @@
 
 // 0   == StartRoom
 // n-1 == EndRoom
+
 typedef struct {
-	room_map	rooms;
+	// (id -> (vec<connection>))
 	vec			*graph;
+	// (id -> room)
+	t_room		**rooms;
+	// (name -> room)
+	room_map	rooms_map;
 	size_t		nb_ants;
 	size_t		nb_rooms;
 
+	// Private
 	size_t		_indexing;
 	t_room		*_start;
 	t_room		*_end;
