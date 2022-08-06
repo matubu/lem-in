@@ -19,8 +19,6 @@ room_pair make_room_pair(char *first, t_room second) {
 
 room_node *new_room_node(room_pair value, int col) {
     room_node *n = malloc(sizeof(room_node));
-    if (!n)
-        return NULL;
     n->value = value;
     n->col = col;
     n->par = NULL;
@@ -58,12 +56,9 @@ room_node *front(room_map *mp) {
     return cur;
 }
 
-void insert_room(room_map *mp, room_pair elem) {
+room_node *insert_room(room_map *mp, room_pair elem) {
     room_node *new = new_room_node(elem, 1);
-    if (!new) {
-        clear_room_map(mp);
-        return ;
-    }
+
     if (!mp->root) {
         new->col = 0;
         mp->root = new;
@@ -90,6 +85,7 @@ void insert_room(room_map *mp, room_pair elem) {
         }
     }
     mp->size++;
+	return (new);
 }
 
 room_node *get_room(room_map *mp, char *value) {

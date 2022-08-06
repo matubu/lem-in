@@ -56,24 +56,24 @@ typedef struct s_priority_queue {
 
 
 //utils
-void ft_memcpy(void *dst, void *src, size_t n);
+void	ft_memcpy(void *dst, void *src, size_t n);
 
 //vec
-void init_vec(vec *v, int size, int val);
-int push_back(vec *v, int val);
-void pop_back(vec *v);
+void	init_vec(vec *v, int size, int val);
+int		push_back(vec *v, int val);
+void	pop_back(vec *v);
 
 //priority_queue
-void push(priority_queue *pq, pair elem);
-void pop(priority_queue *pq);
-node *top(priority_queue *pq);
-void clear_priority_queue(priority_queue *pq);
-void init_priority_queue(priority_queue *pq, int (*cmp)(int, int));
-node *new_node(pair value, int col);
-pair make_pair(int first, int second);
+void	push(priority_queue *pq, pair elem);
+void	pop(priority_queue *pq);
+node	*top(priority_queue *pq);
+void	clear_priority_queue(priority_queue *pq);
+void	init_priority_queue(priority_queue *pq, int (*cmp)(int, int));
+node	*new_node(pair value, int col);
+pair	make_pair(int first, int second);
 
 //comp
-int greater(int a, int b);
-int less(int a, int b);
+int		greater(int a, int b);
+int		less(int a, int b);
 
 #endif

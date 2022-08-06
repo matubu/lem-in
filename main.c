@@ -20,39 +20,39 @@ void	lem_in(char *filename) {
 }
 
 
-int main() {
-	room_map mp;
-	init_room_map(&mp, less_str);
-	//room_node a = {.id = 0, .x = 1, .y = 1};
-	insert_room(&mp, make_room_pair("pouet", (t_room){.id = 0, .x = 1, .y = 1}));
-	char str[] = "abclksadj;lsdkjf;ldsk";
-	for (int i = 0; i < 10000; i++) {
-		insert_room(&mp, make_room_pair(str, (t_room){.id = 0, .x = 1, .y = 1}));
-		str[0] = rand()%127 + 1;
-		str[1] = rand()%127 + 1;
-		str[2] = rand()%127 + 1;
-		str[3] = rand()%127 + 1;
-		str[4] = rand()%127 + 1;
-		str[5] = rand()%127 + 1;
+// int main() {
+// 	room_map mp;
+// 	init_room_map(&mp, less_str);
+// 	//room_node a = {.id = 0, .x = 1, .y = 1};
+// 	insert_room(&mp, make_room_pair("pouet", (t_room){.id = 0, .x = 1, .y = 1}));
+// 	char str[] = "abclksadj;lsdkjf;ldsk";
+// 	for (int i = 0; i < 10000; i++) {
+// 		insert_room(&mp, make_room_pair(str, (t_room){.id = 0, .x = 1, .y = 1}));
+// 		str[0] = rand()%127 + 1;
+// 		str[1] = rand()%127 + 1;
+// 		str[2] = rand()%127 + 1;
+// 		str[3] = rand()%127 + 1;
+// 		str[4] = rand()%127 + 1;
+// 		str[5] = rand()%127 + 1;
+// 	}
+// 	insert_room(&mp, make_room_pair("plop", (t_room){.id = 42, .x = 1, .y = 1}));
+
+// 	room_node *room = get_room(&mp, "pouet");
+// 	printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
+
+// 	room = get_room(&mp, "plop");
+// 	printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
+// }
+
+int	main(int argc, char **argv) {
+	if (argc < 2) {
+		lem_in("map/simple");
+		return (0);
 	}
-	insert_room(&mp, make_room_pair("plop", (t_room){.id = 42, .x = 1, .y = 1}));
-
-	room_node *room = get_room(&mp, "pouet");
-	printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
-
-	room = get_room(&mp, "plop");
-	printf("[%zu] x=%zu y=%zu\n", room->value.second.id, room->value.second.x, room->value.second.y);
+	for (int i = 1; i < argc; ++i) {
+		lem_in(argv[i]);
+	}
 }
-
-//int	main(int argc, char **argv) {
-	//if (argc < 2) {
-		//lem_in("map/simple");
-		//return (0);
-	//}
-	//for (int i = 1; i < argc; ++i) {
-		//lem_in(argv[i]);
-	//}
-//}
 
 // int main() {
 
