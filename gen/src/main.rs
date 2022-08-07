@@ -40,6 +40,8 @@ fn main() {
 		println!("{i} 0 0");
 	}
 	let mut rng = rand::thread_rng();
+
+	// TODO check if the link already exist
 	for _ in 0..nb_links {
 		let a: usize = rng.gen_range(0..nb_rooms);
 		let mut b: usize;
