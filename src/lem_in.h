@@ -67,6 +67,8 @@ void	ft_memcpy(void *dst, void *src, size_t n);
 void	init_vec(vec *v, int size, int val);
 int		push_back(vec *v, int val);
 void	pop_back(vec *v);
+void    reverse_vec(vec *v);
+void    clear_vec(vec *v);
 
 //priority_queue
 void	push(priority_queue *pq, pair elem);

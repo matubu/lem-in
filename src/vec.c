@@ -34,3 +34,15 @@ void pop_back(vec *v) {
     if (v->size) 
         v->size--;
 }
+
+void reverse_vec(vec *v) {
+    for (int i = 0; i < v->size / 2; i++) {
+        int tmp = v->arr[i];
+        v->arr[i] = v->arr[v->size - i - 1];
+        v->arr[v->size - i - 1] = tmp;
+    }
+}
+
+void clear_vec(vec *v) {
+    free(v->arr);
+}
