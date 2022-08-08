@@ -84,8 +84,31 @@ void find_path(vec *graph, int n, int_map *available, vec *path) {
 	generate_path(path, &costs, available, &from, n);
 }
 
-void print_solution(vec *paths, int m, t_room **rooms) {
+void print_connection(vec *graph, vec *vis, t_room **rooms, int u) {
+	if (vis->at(u)) return;
+	vis->at(u) = 1;
+	for (int i = 0; i < graph[u].size; i++) {
+		printf("%s-%s\n", rooms[u]->name, rooms[graph[u].at(i)]->name);
+		print_connection(graph, vis, rooms, graph[u].at(i));
+	}
+}
+
+void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
+	printf("%d\n", m);
+	for (int i = 0; i < n; i++) {
+		printf((i == 0 ? "##START\n" : (i == n - 1 ? "##END\n" : "")));
+		printf("%s %zu %zu\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
+	}
+
+	vec vis; init_vec(&vis, n, 0);
+
+	for (int i = 0; i < n; i++)
+		if (!vis.at(i))
+			print_connection(graph, &vis, rooms, i);
+
+	printf("\n");
 	int f = 1;
+
 	for (int i = 1; f; i++) {
 		f = 0;
 		for (int j = 0; j < m; j++) {
@@ -119,5 +142,5 @@ void solve(t_farm *farm) {
 	for (int i = 0; i < m; i++)
 		find_path(graph, n, available, paths + i);
 
-	print_solution(paths, m, farm->rooms);
+	print_solution(graph, paths, n, m, farm->rooms);
 }
