@@ -5,21 +5,17 @@
 #include "string.h"
 #include "int_map.h"
 
-#define time(code) ({ \
-	clock_t	before = clock(); \
-	typeof(code) tmp = code; \
-	printf("\033[1;94m" #code "\033[0m: took %lfs\n", (double)(clock() - before) / CLOCKS_PER_SEC); \
-	tmp; \
-})
-
 void solve(t_farm *farm);
 
 void	lem_in(char *filename) {
-	t_farm	*farm = time(parse_farm(filename));
+	t_farm	*farm = parse_farm(filename);
+	LOG("Farm parsed");
 
-	time(({solve(farm); 42;}));
+	solve(farm);
+	LOG("Solved");
 
 	free_farm(farm);
+	LOG("Farm cleaned up");
 }
 
 int main(int ac, char **av) {

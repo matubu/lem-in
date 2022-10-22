@@ -148,8 +148,10 @@ void solve(t_farm *farm) {
 	// generate path for each ant
 	for (int i = 0; i < m; i++)
 		find_path(graph, n, available, paths + i);
+	LOG("Solution found");
 
 	print_solution(graph, paths, n, m, farm->rooms);
+	LOG("Solution printed");
 
 	// free stuff
 	for (int i = 0; i < n; i++) {
@@ -158,4 +160,5 @@ void solve(t_farm *farm) {
 	for (int i = 0; i < m; i++) {
 		clear_vec(paths + i);
 	}
+	LOG("Solution freed");
 }
