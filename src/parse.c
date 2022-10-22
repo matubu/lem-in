@@ -2,13 +2,11 @@
 #include "iterator.h"
 #include "string.h"
 
-// TODO warnings
-
 #define NormalRoom 0
 #define StartRoom 1
 #define EndRoom 2
 
-void parse_room(t_farm *farm, LineIterator *it, int type) {
+void	parse_room(t_farm *farm, LineIterator *it, int type) {
 	P_EXPECT(farm->graph == NULL, it, "Cannot define room after links definition");
 
 	room_pair	room;
@@ -50,7 +48,7 @@ void	map_to_room(t_farm *farm, room_node *node) {
 	map_to_room(farm, node->right);
 }
 
-void parse_link(t_farm *farm, LineIterator *it) {
+void	parse_link(t_farm *farm, LineIterator *it) {
 	if (farm->graph == NULL) {
 		// Init graph
 		farm->graph = tmalloc(vec, farm->nb_rooms);
@@ -91,11 +89,11 @@ void parse_link(t_farm *farm, LineIterator *it) {
 	free(b);
 }
 
-t_farm *parse_farm(char *filename) {
+t_farm	*parse_farm(char *filename) {
 	// Read the file and create a iterator
 	FileIterator	lines = create_file_iterator(filename);
 
-	t_farm	*farm = smalloc(t_farm);
+	t_farm			*farm = smalloc(t_farm);
 	init_room_map(&farm->rooms_map, greater_str);
 	farm->graph = NULL;
 	farm->nb_rooms = 0;

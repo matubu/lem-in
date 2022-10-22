@@ -46,16 +46,16 @@ static inline void	parsing_error(LineIterator *it, char *s) {
 
 	printf("\033[1;94m%*s--> \033[0m%s:%lu:%lu\n", offset, "", it->filename, it->line + 1, it->idx + 1);
 	printf("\033[1;94m%lu |  \033[0m%s\n", it->line + 1, it->ptr);
-	printf("%*s    %*s\033[1;91m^ %s\033[0m\n", offset, "", (int)it->idx, "", s);
+	printf("%*s	%*s\033[1;91m^ %s\033[0m\n", offset, "", (int)it->idx, "", s);
 	exit(1);
 }
 
 #define P_EXPECT(condition, it, s) if (!(condition)) parsing_error(it, s)
 
 
-#define	get(it) ((it)->ptr[(it)->idx])
+#define get(it) ((it)->ptr[(it)->idx])
 #define get_next(it) ((it)->ptr[(it)->idx + 1])
-#define	get_ptr(it) ((it)->ptr + (it)->idx)
+#define get_ptr(it) ((it)->ptr + (it)->idx)
 
 #define next(it) ((it)->ptr[(it)->idx++])
 #define next_void(it) (it)->idx++
@@ -79,7 +79,7 @@ static inline char	*next_word(LineIterator *it) {
 	}
 	P_EXPECT(len, it, "Expected a variable");
 	it->idx += len;
-	char *ptr = tmalloc(char, len + 1);
+	char	*ptr = tmalloc(char, len + 1);
 	ptr[len] = '\0';
 	while (len--)
 		ptr[len] = s[len];
@@ -102,5 +102,4 @@ static inline void	skip_whitespace(LineIterator *it) {
 	}
 }
 
-
-#define	is_it_end(it) !((it)->ptr[(it)->idx])
+#define is_it_end(it) !((it)->ptr[(it)->idx])

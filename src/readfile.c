@@ -8,7 +8,7 @@ char	*readfile(char *filename) {
 	struct stat	stat;
 	EXPECT_ERRNO(fstat(fd, &stat) != -1, "Could not stat file");
 
-	char *s = tmalloc(char, stat.st_size + 1);
+	char	*s = tmalloc(char, stat.st_size + 1);
 
 	int len = read(fd, s, stat.st_size);
 	EXPECT_ERRNO(len != -1, "Could not read");
@@ -29,18 +29,18 @@ char	**readfile_lines(char *filename) {
 
 	char	**lines = tmalloc(char *, lines_count + 1);
 
-	size_t idx = 0;
-	size_t i = 0;
+	size_t	idx = 0;
+	size_t	i = 0;
 	while (1) {
 		// test\ntest\0
-		// ^     ^  start of strings
+		// ^	 ^  start of strings
 
-		size_t end = i;
+		size_t	end = i;
 		while (s[end] && s[end] != '\n') {
 			++end;
 		}
 		// test\ntest\0
-		//     ^     ^  end of strings
+		//	 ^	 ^  end of strings
 
 		lines[idx++] = s + i;
 
@@ -48,8 +48,8 @@ char	**readfile_lines(char *filename) {
 			break ;
 
 		// test\ntest\0
-		//     ^
-		//     \0  replace the newlines with \0
+		//	 ^
+		//	 \0  replace the newlines with \0
 		s[end] = '\0';
 		i = end + 1;
 	}

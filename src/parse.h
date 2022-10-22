@@ -22,5 +22,5 @@ typedef struct {
 	t_room		*_end;
 }	t_farm;
 
-t_farm *parse_farm(char *filename);
+t_farm	*parse_farm(char *filename);
 void	free_farm(t_farm *farm);

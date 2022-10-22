@@ -5,7 +5,7 @@
 #include "string.h"
 #include "int_map.h"
 
-void solve(t_farm *farm);
+void	solve(t_farm *farm);
 
 void	lem_in(char *filename) {
 	t_farm	*farm = parse_farm(filename);
@@ -18,7 +18,7 @@ void	lem_in(char *filename) {
 	LOG("Farm cleaned up");
 }
 
-int main(int ac, char **av) {
+int	main(int ac, char **av) {
 	if (ac == 2)
 		lem_in(av[1]);
 	else
