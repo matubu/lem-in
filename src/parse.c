@@ -76,7 +76,7 @@ void parse_link(t_farm *farm, LineIterator *it) {
 	P_EXPECT(get(it) == '-', it, "The name of a room can only contains those characters: [a-zA-Z0-9_]");
 	room_node	*node_a = get_room(&farm->rooms_map, a);
 	P_EXPECT(node_a, it, "No such variable");
-	next(it);
+	next_void(it);
 	char	*b = next_word(it);
 	P_EXPECT(get(it) == '\0', it, "Expected eol");
 	room_node	*node_b = get_room(&farm->rooms_map, b);
@@ -118,9 +118,9 @@ t_farm *parse_farm(char *filename) {
 		
 		if (get(&line) == '#') {
 			// Comment
-			next(&line);
+			next_void(&line);
 			if (get(&line) == '#') {
-				next(&line);
+				next_void(&line);
 				LineIterator	next = next_line(&lines);
 				// Room type
 				if (equal_str(get_ptr(&line), "start")) {
@@ -153,5 +153,11 @@ t_farm *parse_farm(char *filename) {
 }
 
 void	free_farm(t_farm *farm) {
+	clear_room_map(&farm->rooms_map);
+	for (size_t i = 0; i < farm->nb_rooms; ++i) {
+		clear_vec(farm->graph + i);
+	}
+	free(farm->graph);
+	free(farm->rooms);
 	free(farm);
 }

@@ -19,8 +19,6 @@ int_pair make_int_pair(int first, int second) {
 
 int_node *new_int_node(int_pair value, int col) {
     int_node *n = malloc(sizeof(int_node));
-    if (!n)
-        return NULL;
     n->value = value;
     n->col = col;
     n->par = NULL;
@@ -174,11 +172,6 @@ void insertFix_int(int_map *mp, int_node *node) {
 
 void insert_int(int_map *mp, int_pair elem) {
     int_node *new = new_int_node(elem, 1);
-    if (!new) {
-		printf("PROBLEMO\n");
-        clear_int_map(mp);
-        return ;
-    }
     if (!mp->root) {
         new->col = 0;
         mp->root = new;
@@ -241,7 +234,6 @@ void erase_int(int_map *mp, int val) {
 		return ;
 
 	int_node *x, *y, *dummy = NULL;
-	int original_col = node->col;
 
 	if (!node->left && !node->right) {
 		dummy = new_int_node(make_int_pair(0, 0), 0);
@@ -263,7 +255,6 @@ void erase_int(int_map *mp, int val) {
 			y->left = dummy;
 			x = dummy;
 		}
-		original_col = y->col;
 		if (y->par != node) {
 			transplant(mp, y, x);
 			y->left = node->left;
@@ -279,10 +270,10 @@ void erase_int(int_map *mp, int val) {
 
 	if (dummy) {
 		transplant(mp, dummy, NULL);
-		//free(dummy);
+		free(dummy);
 	}
 
-	//free(node);
+	free(node);
 
 	mp->size--;
 }

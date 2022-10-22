@@ -26,7 +26,7 @@ void djikstra(vec *graph, vec *costs, int_map *available, int_map *from, int n) 
 		for (int i = graph[cur.second].size - 1; i >= 0; i--) {
 			int v = graph[cur.second].at(i), cost;
 
-			// if v is visisted or cheaper cost to v is known then skip
+			// if v is visited or cheaper cost to v is known then skip
 			if (vis.at(v) || (cost = upper_bound_int(available + v, cur.first)->value.first) > costs->at(v))
 				continue;
 
@@ -39,6 +39,7 @@ void djikstra(vec *graph, vec *costs, int_map *available, int_map *from, int n) 
 	}
 
 	clear_int_map(&pq);
+	clear_vec(&vis);
 
 	// check if end is reachable
 	if (costs->at(n - 1) == INF) {
@@ -82,6 +83,9 @@ void find_path(vec *graph, int n, int_map *available, vec *path) {
 	djikstra(graph, &costs, available, &from, n);
 
 	generate_path(path, &costs, available, &from, n);
+
+	clear_vec(&costs);
+	clear_int_map(&from);
 }
 
 void print_connection(vec *graph, vec *vis, t_room **rooms, int u) {
@@ -100,7 +104,8 @@ void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 		printf("%s %zu %zu\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
 	}
 
-	vec vis; init_vec(&vis, n, 0);
+	vec vis;
+	init_vec(&vis, n, 0);
 
 	for (int i = 0; i < n; i++)
 		if (!vis.at(i))
@@ -118,6 +123,8 @@ void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 		}
 		if (f) printf("\n");
 	}
+
+	clear_vec(&vis);
 }
 
 void solve(t_farm *farm) {
@@ -143,4 +150,12 @@ void solve(t_farm *farm) {
 		find_path(graph, n, available, paths + i);
 
 	print_solution(graph, paths, n, m, farm->rooms);
+
+	// free stuff
+	for (int i = 0; i < n; i++) {
+		clear_int_map(available + i);
+	}
+	for (int i = 0; i < m; i++) {
+		clear_vec(paths + i);
+	}
 }

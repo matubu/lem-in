@@ -20,8 +20,7 @@ int push_back(vec *v, int val) {
     if (v->size == v->capacity) {
         v->capacity = (v->capacity ? v->capacity * 2 : 1);
         int *tmp = malloc(sizeof(int) * v->capacity);
-        if (tmp)
-            ft_memcpy(tmp, v->arr, sizeof(int) * v->size);
+        ft_memcpy(tmp, v->arr, sizeof(int) * v->size);
         free(v->arr);
         v->arr = tmp;
     }

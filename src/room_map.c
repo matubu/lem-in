@@ -38,6 +38,7 @@ void clear_room_node(room_node *n) {
         return ;
     clear_room_node(n->left);
     clear_room_node(n->right);
+	free(n->value.first);
     free(n);
 }
 

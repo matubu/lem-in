@@ -11,7 +11,9 @@ typedef struct {
 	char	**ptr;
 }	FileIterator;
 
-// Warning: allocate memory (needs free)
+/**
+ * @note allocate memory (needs free)
+ */
 FileIterator	create_file_iterator(char *filename) {
 	char	**lines = readfile_lines(filename);
 
@@ -51,13 +53,12 @@ static inline void	parsing_error(LineIterator *it, char *s) {
 #define P_EXPECT(condition, it, s) if (!(condition)) parsing_error(it, s)
 
 
-// Does not advance the pointer
 #define	get(it) ((it)->ptr[(it)->idx])
 #define get_next(it) ((it)->ptr[(it)->idx + 1])
 #define	get_ptr(it) ((it)->ptr + (it)->idx)
 
-// Get the next element advancing the pointer
 #define next(it) ((it)->ptr[(it)->idx++])
+#define next_void(it) (it)->idx++
 LineIterator	next_line(FileIterator *it) {
 	return ((LineIterator){
 		.filename = it->filename,
@@ -66,7 +67,9 @@ LineIterator	next_line(FileIterator *it) {
 		.ptr = next(it)
 	});
 }
-// Warning: allocate memory (needs free)
+/**
+ * @note allocate memory (needs free)
+ */
 static inline char	*next_word(LineIterator *it) {
 	char	*s = get_ptr(it);
 	int		len = 0;
@@ -95,7 +98,7 @@ size_t	next_sizet(LineIterator *it) {
 static inline void	skip_whitespace(LineIterator *it) {
 	P_EXPECT(is_whitespace(get(it)), it, "Expected a whitespace");
 	while (is_whitespace(get(it))) {
-		next(it);
+		next_void(it);
 	}
 }
 

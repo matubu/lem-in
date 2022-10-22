@@ -9,8 +9,6 @@ pair make_pair(int first, int second) {
 
 node *new_node(pair value, int col) {
     node *n = malloc(sizeof(node));
-    if (!n)
-        return NULL;
     n->value = value;
     n->col = col;
     n->par = NULL;
