@@ -1,13 +1,13 @@
 #include "int_map.h"
 
-int_pair make_int_pair(int first, int second) {
+int_pair	make_int_pair(int first, int second) {
 	int_pair	p;
 	p.first = first;
 	p.second = second;
 	return p;
 }
 
-int_node *new_int_node(int_pair value, int col) {
+int_node	*new_int_node(int_pair value, int col) {
 	int_node	*n = malloc(sizeof(int_node));
 	n->value = value;
 	n->col = col;
@@ -17,13 +17,13 @@ int_node *new_int_node(int_pair value, int col) {
 	return n;
 }
 
-void init_int_map(int_map *mp, int (*cmp)(int, int)) {
+void	init_int_map(int_map *mp, int (*cmp)(int, int)) {
 	mp->root = NULL;
 	mp->size = 0;
 	mp->cmp = cmp;
 }
 
-void clear_int_node(int_node *n) {
+void	clear_int_node(int_node *n) {
 	if (!n)
 		return ;
 	clear_int_node(n->left);
@@ -31,13 +31,13 @@ void clear_int_node(int_node *n) {
 	free(n);
 }
 
-void clear_int_map(int_map *mp) {
+void	clear_int_map(int_map *mp) {
 	clear_int_node(mp->root);
 	mp->root = NULL;
 	mp->size = 0;
 }
 
-int_node *top_int(int_map *mp) {
+int_node	*top_int(int_map *mp) {
 	if (!mp->root)
 		return NULL;
 	int_node	*cur = mp->root;
@@ -46,7 +46,7 @@ int_node *top_int(int_map *mp) {
 	return cur;
 }
 
-void pop_int(int_map *pq) {
+void	pop_int(int_map *pq) {
 	int_node	*cur = top_int(pq);
 
 	if (!cur)
@@ -64,8 +64,6 @@ void pop_int(int_map *pq) {
 	free(cur);
 	pq->size--;
 }
-
-
 
 void	leftRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->right)
@@ -103,19 +101,19 @@ void	rightRotate_int(int_map *mp, int_node *node) {
 	y->right = node;
 }
 
-void leftRightRotate_int(int_map *mp, int_node *node) {
+void	leftRightRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->left || !node->left->right)
 		return ;
 	leftRotate_int(mp, node->left);
 }
 
-void rightLeftRotate_int(int_map *mp, int_node *node) {
+void	rightLeftRotate_int(int_map *mp, int_node *node) {
 	if (!node || !node->right || !node->right->left)
 		return ;
 	rightRotate_int(mp, node->right);
 }
 
-void insertFix_int(int_map *mp, int_node *node) {
+void	insertFix_int(int_map *mp, int_node *node) {
 	if (!node->par || !node->par->par) 
 		return;
 	while (node->par && node->par->col == RED && node->par->par) {
@@ -160,7 +158,7 @@ void insertFix_int(int_map *mp, int_node *node) {
 	mp->root->col = BLACK;
 }
 
-void insert_int(int_map *mp, int_pair elem) {
+void	insert_int(int_map *mp, int_pair elem) {
 	int_node	*new = new_int_node(elem, 1);
 	if (!mp->root) {
 		new->col = 0;
@@ -192,7 +190,7 @@ void insert_int(int_map *mp, int_pair elem) {
 }
 					
 
-int_node *predecessor(int_node *node) {
+int_node	*predecessor(int_node *node) {
 	if (!node || !node->left)
 		return (NULL);
 	node = node->left;
@@ -201,7 +199,7 @@ int_node *predecessor(int_node *node) {
 	return node;
 }
 
-void transplant(int_map *mp, int_node *u, int_node *v) {
+void	transplant(int_map *mp, int_node *u, int_node *v) {
 	if (!u->par)
 		mp->root = v;
 	else if (u == u->par->left)
@@ -212,7 +210,7 @@ void transplant(int_map *mp, int_node *u, int_node *v) {
 		v->par = u->par;
 }
 
-void erase_int(int_map *mp, int val) {
+void	erase_int(int_map *mp, int val) {
 	int_node	*node = mp->root;
 
 	while (node && node->value.first != val)
@@ -269,7 +267,7 @@ void erase_int(int_map *mp, int val) {
 }
 
 
-int_node *upper_bound_int(int_map *mp, int value) {
+int_node	*upper_bound_int(int_map *mp, int value) {
 	int_node	*cur = mp->root;
 	int_node	*ret = NULL;
 
@@ -280,33 +278,6 @@ int_node *upper_bound_int(int_map *mp, int value) {
 			ret = cur, cur = cur->left;
 	}
 	return ret;
-}
-
-int_node *inverse_lower_bound_int(int_map *mp, int value) {
-	int_node	*cur = mp->root;
-	int_node	*ret = NULL;
-
-	while (cur) {
-		if (mp->cmp(cur->value.first, value) || value == cur->value.first)
-			ret = cur, cur = cur->right;
-		else
-			cur = cur->left;
-	}
-	return ret;
-}
-
-int_node	*lower_bound_int(int_map *mp, int value) {
-	int_node *cur = mp->root;
-	int_node *ret = NULL;
-
-	while (cur) {
-		if (mp->cmp(cur->value.first, value))
-			cur = cur->right;
-		else
-			ret = cur, cur = cur->left;
-	}
-	return ret;
-
 }
 
 int_node	*get_int(int_map *mp, int value) {

@@ -43,8 +43,7 @@ void djikstra(vec *graph, vec *costs, int_map *available, int_map *from, int n) 
 
 	// check if end is reachable
 	if (costs->at(n - 1) == INF) {
-		printf("\033[1;91mInexistant path to end\n\033[0m");
-		exit(1);
+		die("No path found");
 	}
 }
 
@@ -100,7 +99,10 @@ void print_connection(vec *graph, vec *vis, t_room **rooms, int u) {
 void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 	printf("%d\n", m);
 	for (int i = 0; i < n; i++) {
-		printf((i == 0 ? "##START\n" : (i == n - 1 ? "##END\n" : "")));
+		if (i == 0)
+			FD_PUT(1, "##START\n");
+		else if (i == n - 1)
+			FD_PUT(1, "##END\n");
 		printf("%s %zu %zu\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
 	}
 
@@ -111,7 +113,7 @@ void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 		if (!vis.at(i))
 			print_connection(graph, &vis, rooms, i);
 
-	printf("\n");
+	FD_PUT(1, "\n");
 	int f = 1;
 
 	for (int i = 1; f; i++) {
@@ -121,7 +123,9 @@ void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 			f = 1;
 			printf("L%d-%s ", j + 1, rooms[paths[j].at(i)]->name);
 		}
-		if (f) printf("\n");
+		if (f) {
+			FD_PUT(1, "\n");
+		}
 	}
 
 	clear_vec(&vis);

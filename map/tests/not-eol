@@ -9,7 +9,6 @@ F 3 2
 G 5 2
 ##end
 H 6 1
-#links
 A-B
 A-E
 E-D
@@ -18,5 +17,5 @@ B-C
 C-D
 D-H
 F-D
-F-G
+F-G   
 G-H

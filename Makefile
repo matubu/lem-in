@@ -37,4 +37,14 @@ run: all
 	@$(Print) "$(LogPre)\x1b[1;96mLAUNCH$(LogPost)" ./$(Name)
 	@./$(Name)
 
-.PHONY: all all_no_opt re clean fclean run
+update_test_ref:
+	cp .test_log .test_log_ref
+
+test: all
+	@for file in map/tests/*; do \
+		echo -e "\n\n=== $$file ==="; \
+		./$(Name) $$file; \
+	done > .test_log 2>&1
+	@diff -u .test_log_ref .test_log
+
+.PHONY: all re clean fclean run update_test_ref test

@@ -40,18 +40,19 @@ typedef struct {
 
 
 static inline void	parsing_error(LineIterator *it, char *s) {
-	printf("\033[1;91mError[parsing]\033[0m:\n");
+	dprintf(2, "\033[1;91mError\033[0;90m(parsing)\033[0m");
+	dprintf(2, "\033[1;94m ➔  \033[0m%s:%lu:%lu\n", it->filename, it->line + 1, it->idx);
 
 	int	offset = int_string_size(it->line + 1);
 
-	printf("\033[1;94m%*s--> \033[0m%s:%lu:%lu\n", offset, "", it->filename, it->line + 1, it->idx + 1);
-	printf("\033[1;94m%lu |  \033[0m%s\n", it->line + 1, it->ptr);
-	printf("%*s	%*s\033[1;91m^ %s\033[0m\n", offset, "", (int)it->idx, "", s);
+	dprintf(2, "\033[1;94m%lu |  \033[0m%s\033[90m⮰\033[0m\n", it->line + 1, it->ptr);
+	dprintf(2, "%*s   %*s\033[1;91m↑ %s\033[0m\n", offset, "", (int)it->idx, "", s);
 	exit(1);
 }
 
 #define P_EXPECT(condition, it, s) if (!(condition)) parsing_error(it, s)
 
+#define is_it_end(it) !((it)->ptr[(it)->idx])
 
 #define get(it) ((it)->ptr[(it)->idx])
 #define get_next(it) ((it)->ptr[(it)->idx + 1])
@@ -59,14 +60,18 @@ static inline void	parsing_error(LineIterator *it, char *s) {
 
 #define next(it) ((it)->ptr[(it)->idx++])
 #define next_void(it) (it)->idx++
+
 LineIterator	next_line(FileIterator *it) {
-	return ((LineIterator){
+	LineIterator	line_it = (LineIterator){
 		.filename = it->filename,
 		.line = it->idx,
 		.idx = 0,
 		.ptr = next(it)
-	});
+	};
+	P_EXPECT(line_it.ptr != NULL, &line_it, "unexpected end of file");
+	return (line_it);
 }
+
 /**
  * @note allocate memory (needs free)
  */
@@ -85,21 +90,21 @@ static inline char	*next_word(LineIterator *it) {
 		ptr[len] = s[len];
 	return (ptr);
 }
+
 size_t	next_sizet(LineIterator *it) {
 	size_t	n = 0;
 
-	P_EXPECT(is_number(get(it)), it, "Expected a number");
+	P_EXPECT(is_number(get(it)), it, "Expected a positive number");
 	while (is_number(get(it))) {
 		n = n * 10 + (next(it) - '0');
 	}
 
 	return (n);
 }
+
 static inline void	skip_whitespace(LineIterator *it) {
-	P_EXPECT(is_whitespace(get(it)), it, "Expected a whitespace");
+	P_EXPECT(is_whitespace(next(it)), it, "Expected a whitespace");
 	while (is_whitespace(get(it))) {
 		next_void(it);
 	}
 }
-
-#define is_it_end(it) !((it)->ptr[(it)->idx])

@@ -3,3 +3,5 @@ check if solution exist
 print solution as in the subject (graph before)
 make solve more clean :)
 remove printf
+fix offset size_t error
+bug double path printed four times

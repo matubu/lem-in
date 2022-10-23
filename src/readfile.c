@@ -31,28 +31,31 @@ char	**readfile_lines(char *filename) {
 
 	size_t	idx = 0;
 	size_t	i = 0;
+
 	while (1) {
 		// test\ntest\0
-		// ^	 ^  start of strings
+		// ^     ^  start of strings
 
 		size_t	end = i;
 		while (s[end] && s[end] != '\n') {
 			++end;
 		}
 		// test\ntest\0
-		//	 ^	 ^  end of strings
+		//     ^     ^  end of strings
 
 		lines[idx++] = s + i;
 
-		if (s[end] == '\0')
+		if (s[end] == '\0') {
 			break ;
+		}
 
 		// test\ntest\0
-		//	 ^
-		//	 \0  replace the newlines with \0
+		//     ^
+		//     \0  replace the newlines with \0
 		s[end] = '\0';
 		i = end + 1;
 	}
+
 	lines[idx] = NULL;
 
 	return (lines);

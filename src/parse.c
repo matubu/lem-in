@@ -29,13 +29,13 @@ void	parse_room(t_farm *farm, LineIterator *it, int type) {
 
 	if (type == StartRoom)
 	{
-		P_EXPECT(farm->_start == NULL, it, "Duplicate start room");
-		farm->_start = &node->value.second;
+		P_EXPECT(farm->_start_room == NULL, it, "Duplicate start room");
+		farm->_start_room = &node->value.second;
 	}
 	if (type == EndRoom)
 	{
-		P_EXPECT(farm->_end == NULL, it, "Duplicate end room");
-		farm->_end = &node->value.second;
+		P_EXPECT(farm->_end_room == NULL, it, "Duplicate end room");
+		farm->_end_room = &node->value.second;
 	}
 }
 
@@ -50,6 +50,9 @@ void	map_to_room(t_farm *farm, room_node *node) {
 
 void	parse_link(t_farm *farm, LineIterator *it) {
 	if (farm->graph == NULL) {
+		P_EXPECT(farm->_start_room != NULL, it, "Missing start room");
+		P_EXPECT(farm->_end_room != NULL, it, "Missing end room");
+
 		// Init graph
 		farm->graph = tmalloc(vec, farm->nb_rooms);
 		for (size_t i = 0; i < farm->nb_rooms; ++i) {
@@ -61,8 +64,8 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 		map_to_room(farm, farm->rooms_map.root);
 
 		// Mode end room to n - 1
-		t_room *tmp = farm->_end;
-		size_t	id_end = farm->_end->id;
+		t_room *tmp = farm->_end_room;
+		size_t	id_end = farm->_end_room->id;
 		size_t	id_swap = farm->nb_rooms - 1;
 		farm->rooms[id_swap]->id = id_end;
 		farm->rooms[id_end]->id = id_swap;
@@ -98,12 +101,11 @@ t_farm	*parse_farm(char *filename) {
 	farm->graph = NULL;
 	farm->nb_rooms = 0;
 	farm->_indexing = 1;
-	farm->_start = NULL;
-	farm->_end = NULL;
+	farm->_start_room = NULL;
+	farm->_end_room = NULL;
 
 	// Parse the number of ants
 	LineIterator	line = next_line(&lines);
-	P_EXPECT(line.ptr != NULL, &line, "Should contains the number of ants");
 	farm->nb_ants = next_sizet(&line);
 	P_EXPECT(get(&line) == '\0', &line, "Expected eol, should only contains the number of ants");
 
@@ -117,15 +119,12 @@ t_farm	*parse_farm(char *filename) {
 		if (get(&line) == '#') {
 			// Comment
 			next_void(&line);
-			if (get(&line) == '#') {
-				next_void(&line);
+			if (next(&line) == '#') {
 				LineIterator	next = next_line(&lines);
 				// Room type
 				if (equal_str(get_ptr(&line), "start")) {
-					P_EXPECT(next.ptr != NULL, &next, "Expected a newline with a room just after \"##start\"");
 					parse_room(farm, &next, StartRoom);
 				} else if (equal_str(get_ptr(&line), "end")) {
-					P_EXPECT(next.ptr != NULL, &next, "Expected a newline with a room just after \"##end\"");
 					parse_room(farm, &next, EndRoom);
 				} else {
 					parsing_error(&line, "Can only be \"start\" or \"end\"");
@@ -142,8 +141,7 @@ t_farm	*parse_farm(char *filename) {
 		}
 	}
 
-	P_EXPECT(farm->_start != NULL, &line, "Missing start room");
-	P_EXPECT(farm->_end != NULL, &line, "Missing end room");
+	P_EXPECT(farm->graph != NULL, &line, "Missing links");
 
 	free_file_iterator(&lines);
 

@@ -3,9 +3,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#define bool int
-#define true 1
-#define false 0
+#define bool	int
+#define true	1
+#define false	0
 
 #include "io.h"
 
