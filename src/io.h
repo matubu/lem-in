@@ -1,8 +1,11 @@
 #pragma once
 
 #include <unistd.h>
-#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include <sys/errno.h>
+#include <time.h>
+
 #include "string.h"
 
 #define FD_PUT(fd, s) write(fd, s, sizeof(s) - 1)
@@ -29,3 +32,6 @@ static inline void	die(char *s) {
 
 #define EXPECT(condition, s) if (!(condition)) { die(s); }
 #define EXPECT_ERRNO(condition, s) if (!(condition)) { die_errno(s); }
+
+#define LOG(stamp) \
+	dprintf(2, "\033[90m%10.2lfs \033[1;94m" stamp "\033[0m\n", (double)(clock()) / CLOCKS_PER_SEC)

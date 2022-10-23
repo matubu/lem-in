@@ -1,4 +1,3 @@
-#include "io.h"
 #include "readfile.h"
 
 char	*readfile(char *filename) {
@@ -8,7 +7,7 @@ char	*readfile(char *filename) {
 	struct stat	stat;
 	EXPECT_ERRNO(fstat(fd, &stat) != -1, "Could not stat file");
 
-	char	*s = tmalloc(char, stat.st_size + 1);
+	char	*s = safe_malloc(sizeof(char), stat.st_size + 1);
 
 	int len = read(fd, s, stat.st_size);
 	EXPECT_ERRNO(len != -1, "Could not read");
@@ -21,22 +20,22 @@ char	*readfile(char *filename) {
 char	**readfile_lines(char *filename) {
 	char	*s = readfile(filename);
 
-	uint	lines_count = 1;
-	for (uint i = 0; s[i]; ++i) {
+	u64	lines_count = 1;
+	for (u64 i = 0; s[i]; ++i) {
 		if (s[i] == '\n')
 			++lines_count;
 	}
 
-	char	**lines = tmalloc(char *, lines_count + 1);
+	char	**lines = safe_malloc(sizeof(char *), lines_count + 1);
 
-	uint	idx = 0;
-	uint	i = 0;
+	u64	idx = 0;
+	u64	i = 0;
 
 	while (1) {
 		// test\ntest\0
 		// ^     ^  start of strings
 
-		uint	end = i;
+		u64	end = i;
 		while (s[end] && s[end] != '\n') {
 			++end;
 		}

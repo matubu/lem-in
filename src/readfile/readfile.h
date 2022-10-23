@@ -2,10 +2,10 @@
 
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
+
+#include "allocator/safe_malloc.h"
+#include "types.h"
+#include "io.h"
 
 char	*readfile(char *filename);
 char	**readfile_lines(char *filename);

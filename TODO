@@ -1,8 +1,3 @@
-parsing error should not necessary exit
-check if solution exist
-print solution as in the subject (graph before)
 make solve more clean :)
 remove printf
-fix offset size_t error
-bug double path printed four times
-use size_t
+fix error cursor wrong offset (when last user a get)

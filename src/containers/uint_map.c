@@ -1,14 +1,14 @@
-#include "uint_map.h"
+#include "maps.h"
 
-uint_pair make_uint_pair(uint first, uint second) {
-	uint_pair	p;
+u64_pair make_u64_pair(u64 first, u64 second) {
+	u64_pair	p;
 	p.first = first;
 	p.second = second;
 	return p;
 }
 
-uint_node	*new_uint_node(uint_pair value, uint col) {
-	uint_node	*n = malloc(sizeof(uint_node));
+u64_node	*new_u64_node(u64_pair value, u64 col) {
+	u64_node	*n = safe_malloc(sizeof(u64_node), 1);
 	n->value = value;
 	n->col = col;
 	n->par = NULL;
@@ -17,37 +17,37 @@ uint_node	*new_uint_node(uint_pair value, uint col) {
 	return n;
 }
 
-void	init_uint_map(uint_map *mp, bool (*cmp)(uint, uint)) {
+void	init_u64_map(u64_map *mp, bool (*cmp)(u64, u64)) {
 	mp->root = NULL;
 	mp->size = 0;
 	mp->cmp = cmp;
 }
 
-void	clear_uint_node(uint_node *n) {
+void	clear_u64_node(u64_node *n) {
 	if (!n)
 		return ;
-	clear_uint_node(n->left);
-	clear_uint_node(n->right);
+	clear_u64_node(n->left);
+	clear_u64_node(n->right);
 	free(n);
 }
 
-void	clear_uint_map(uint_map *mp) {
-	clear_uint_node(mp->root);
+void	clear_u64_map(u64_map *mp) {
+	clear_u64_node(mp->root);
 	mp->root = NULL;
 	mp->size = 0;
 }
 
-uint_node	*top_uint(uint_map *mp) {
+u64_node	*top_u64(u64_map *mp) {
 	if (!mp->root)
 		return NULL;
-	uint_node	*cur = mp->root;
+	u64_node	*cur = mp->root;
 	while (cur->left)
 		cur = cur->left; 
 	return cur;
 }
 
-void	pop_uint(uint_map *pq) {
-	uint_node	*cur = top_uint(pq);
+void	pop_u64(u64_map *pq) {
+	u64_node	*cur = top_u64(pq);
 
 	if (!cur)
 		return ;
@@ -65,10 +65,10 @@ void	pop_uint(uint_map *pq) {
 	pq->size--;
 }
 
-void	leftRotate_uint(uint_map *mp, uint_node *node) {
+void	leftRotate_u64(u64_map *mp, u64_node *node) {
 	if (!node || !node->right)
 		return ;
-	uint_node *y = node->right;
+	u64_node *y = node->right;
 	node->right = y->left;
 	if (y->left)
 		y->left->par = node;
@@ -83,10 +83,10 @@ void	leftRotate_uint(uint_map *mp, uint_node *node) {
 	y->left = node;
 }
 
-void	rightRotate_uint(uint_map *mp, uint_node *node) {
+void	rightRotate_u64(u64_map *mp, u64_node *node) {
 	if (!node || !node->left)
 		return ;
-	uint_node	*y = node->left;
+	u64_node	*y = node->left;
 	node->left = y->right;
 	if (y->right)
 		y->right->par = node;
@@ -101,23 +101,23 @@ void	rightRotate_uint(uint_map *mp, uint_node *node) {
 	y->right = node;
 }
 
-void	leftRightRotate_uint(uint_map *mp, uint_node *node) {
+void	leftRightRotate_u64(u64_map *mp, u64_node *node) {
 	if (!node || !node->left || !node->left->right)
 		return ;
-	leftRotate_uint(mp, node->left);
+	leftRotate_u64(mp, node->left);
 }
 
-void	rightLeftRotate_uint(uint_map *mp, uint_node *node) {
+void	rightLeftRotate_u64(u64_map *mp, u64_node *node) {
 	if (!node || !node->right || !node->right->left)
 		return ;
-	rightRotate_uint(mp, node->right);
+	rightRotate_u64(mp, node->right);
 }
 
-void	insertFix_uint(uint_map *mp, uint_node *node) {
+void	insertFix_u64(u64_map *mp, u64_node *node) {
 	if (!node->par || !node->par->par) 
 		return;
 	while (node->par && node->par->col == RED && node->par->par) {
-		uint_node	*p = node->par, *gp = node->par->par;
+		u64_node	*p = node->par, *gp = node->par->par;
 		if (p == gp->left)
 			if (gp->right && gp->right->col == RED) {
 				gp->right->col = BLACK;
@@ -127,12 +127,12 @@ void	insertFix_uint(uint_map *mp, uint_node *node) {
 			} else {
 				if (node == p->right) {
 					node = p;
-					leftRotate_uint(mp, node);
+					leftRotate_u64(mp, node);
 				}
 				if (node->par->par) { 
 					node->par->col = BLACK;
 					node->par->par->col = RED;
-					rightRotate_uint(mp, node->par->par);
+					rightRotate_u64(mp, node->par->par);
 				}
 			} else {
 				if (gp->left && gp->left->col == RED) {
@@ -143,12 +143,12 @@ void	insertFix_uint(uint_map *mp, uint_node *node) {
 				} else {
 					if (node == p->left) {
 						node = p;
-						rightRotate_uint(mp, node);
+						rightRotate_u64(mp, node);
 					}
 					if (node->par->par) {
 						node->par->col = BLACK;
 						node->par->par->col = RED;
-						leftRotate_uint(mp, node->par->par);
+						leftRotate_u64(mp, node->par->par);
 					}
 				}
 			}
@@ -158,13 +158,13 @@ void	insertFix_uint(uint_map *mp, uint_node *node) {
 	mp->root->col = BLACK;
 }
 
-void	insert_uint(uint_map *mp, uint_pair elem) {
-	uint_node	*new = new_uint_node(elem, 1);
+void	insert_u64(u64_map *mp, u64_pair elem) {
+	u64_node	*new = new_u64_node(elem, 1);
 	if (!mp->root) {
 		new->col = 0;
 		mp->root = new;
 	} else {
-		uint_node *cur = mp->root;
+		u64_node *cur = mp->root;
 		while (cur) {
 			if (mp->cmp(new->value.first, cur->value.first)) {
 				if (cur->left)
@@ -185,12 +185,12 @@ void	insert_uint(uint_map *mp, uint_pair elem) {
 			}
 		}
 	}
-	insertFix_uint(mp, new);
+	insertFix_u64(mp, new);
 	mp->size++;
 }
 					
 
-uint_node	*predecessor(uint_node *node) {
+u64_node	*predecessor(u64_node *node) {
 	if (!node || !node->left)
 		return (NULL);
 	node = node->left;
@@ -199,7 +199,7 @@ uint_node	*predecessor(uint_node *node) {
 	return node;
 }
 
-void	transplant(uint_map *mp, uint_node *u, uint_node *v) {
+void	transplant(u64_map *mp, u64_node *u, u64_node *v) {
 	if (!u->par)
 		mp->root = v;
 	else if (u == u->par->left)
@@ -210,8 +210,8 @@ void	transplant(uint_map *mp, uint_node *u, uint_node *v) {
 		v->par = u->par;
 }
 
-void	erase_uint(uint_map *mp, uint val) {
-	uint_node	*node = mp->root;
+void	erase_u64(u64_map *mp, u64 val) {
+	u64_node	*node = mp->root;
 
 	while (node && node->value.first != val)
 		node = (mp->cmp(val, node->value.first) ? node->left : node->right);
@@ -219,12 +219,12 @@ void	erase_uint(uint_map *mp, uint val) {
 	if (!node)
 		return ;
 
-	uint_node	*x,
+	u64_node	*x,
 				*y,
 				*dummy = NULL;
 
 	if (!node->left && !node->right) {
-		dummy = new_uint_node(make_uint_pair(0, 0), 0);
+		dummy = new_u64_node(make_u64_pair(0, 0), 0);
 		transplant(mp, node, dummy);
 		x = dummy;
 	} else if (!node->left) {
@@ -237,7 +237,7 @@ void	erase_uint(uint_map *mp, uint val) {
 		y = predecessor(node);
 		x = y->left;
 		if (!x) {
-			dummy = new_uint_node(make_uint_pair(0, 0), 0);
+			dummy = new_u64_node(make_u64_pair(0, 0), 0);
 			dummy->col = BLACK;
 			dummy->par = y;
 			y->left = dummy;
@@ -267,9 +267,9 @@ void	erase_uint(uint_map *mp, uint val) {
 }
 
 
-uint_node	*upper_bound_uint(uint_map *mp, uint value) {
-	uint_node	*cur = mp->root;
-	uint_node	*ret = NULL;
+u64_node	*upper_bound_u64(u64_map *mp, u64 value) {
+	u64_node	*cur = mp->root;
+	u64_node	*ret = NULL;
 
 	while (cur) {
 		if (mp->cmp(cur->value.first, value) || value == cur->value.first)
@@ -280,8 +280,8 @@ uint_node	*upper_bound_uint(uint_map *mp, uint value) {
 	return ret;
 }
 
-uint_node	*get_uint(uint_map *mp, uint value) {
-	uint_node *cur = mp->root;
+u64_node	*get_u64(u64_map *mp, u64 value) {
+	u64_node *cur = mp->root;
 
 	while (cur) {
 		if (cur->value.first == value)

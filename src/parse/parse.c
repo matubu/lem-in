@@ -1,6 +1,4 @@
 #include "parse.h"
-#include "iterator.h"
-#include "string.h"
 
 #define NormalRoom 0
 #define StartRoom 1
@@ -13,9 +11,9 @@ void	parse_room(t_farm *farm, LineIterator *it, int type) {
 
 	room.first = room.second.name = next_word(it);
 	skip_whitespace(it);
-	room.second.x = next_sizet(it);
+	room.second.x = next_u64(it);
 	skip_whitespace(it);
-	room.second.y = next_sizet(it);
+	room.second.y = next_u64(it);
 	P_EXPECT(get(it) == '\0', it, "Expected eol");
 
 	++farm->nb_rooms;
@@ -54,19 +52,19 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 		P_EXPECT(farm->_end_room != NULL, it, "Missing end room");
 
 		// Init graph
-		farm->graph = tmalloc(vec, farm->nb_rooms);
-		for (uint i = 0; i < farm->nb_rooms; ++i) {
+		farm->graph = safe_malloc(sizeof(vec), farm->nb_rooms);
+		for (u64 i = 0; i < farm->nb_rooms; ++i) {
 			init_vec(farm->graph + i, 0, 0);
 		}
 
 		// Generate (id -> room) table
-		farm->rooms = tmalloc(t_room *, farm->nb_rooms);
+		farm->rooms = safe_malloc(sizeof(t_room *), farm->nb_rooms);
 		map_to_room(farm, farm->rooms_map.root);
 
 		// Mode end room to n - 1
 		t_room *tmp = farm->_end_room;
-		uint	id_end = farm->_end_room->id;
-		uint	id_swap = farm->nb_rooms - 1;
+		u64	id_end = farm->_end_room->id;
+		u64	id_swap = farm->nb_rooms - 1;
 		farm->rooms[id_swap]->id = id_end;
 		farm->rooms[id_end]->id = id_swap;
 		farm->rooms[id_end] = farm->rooms[id_swap];
@@ -83,11 +81,11 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 	room_node	*node_b = get_room(&farm->rooms_map, b);
 	P_EXPECT(node_b, it, "No such variable");
 
-	uint	id_a = node_a->value.second.id;
-	uint	id_b = node_b->value.second.id;
+	u64	id_a = node_a->value.second.id;
+	u64	id_b = node_b->value.second.id;
 
 	P_EXPECT(id_a != id_b, it, "Cannot create circular link");
-	for (uint i = 0; i < farm->graph[id_a].size; ++i) {
+	for (u64 i = 0; i < farm->graph[id_a].size; ++i) {
 		P_EXPECT(id_b != farm->graph[id_a].at(i), it, "Link redefinition");
 	}
 
@@ -102,7 +100,7 @@ t_farm	*parse_farm(char *filename) {
 	// Read the file and create a iterator
 	FileIterator	lines = create_file_iterator(filename);
 
-	t_farm			*farm = smalloc(t_farm);
+	t_farm			*farm = safe_malloc(sizeof(t_farm), 1);
 	init_room_map(&farm->rooms_map, greater_str);
 	farm->graph = NULL;
 	farm->nb_rooms = 0;
@@ -112,7 +110,7 @@ t_farm	*parse_farm(char *filename) {
 
 	// Parse the number of ants
 	LineIterator	line = next_line(&lines);
-	farm->nb_ants = next_sizet(&line);
+	farm->nb_ants = next_u64(&line);
 	P_EXPECT(get(&line) == '\0', &line, "Expected eol, should only contains the number of ants");
 
 	// Parse rooms_map and links
@@ -156,7 +154,7 @@ t_farm	*parse_farm(char *filename) {
 
 void	free_farm(t_farm *farm) {
 	clear_room_map(&farm->rooms_map);
-	for (uint i = 0; i < farm->nb_rooms; ++i) {
+	for (u64 i = 0; i < farm->nb_rooms; ++i) {
 		clear_vec(farm->graph + i);
 	}
 	free(farm->graph);

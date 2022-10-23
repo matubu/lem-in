@@ -1,14 +1,7 @@
-#include "room_map.h"
-
-room_pair	make_room_pair(char *first, t_room second) {
-	room_pair	p;
-	p.first = first;
-	p.second = second;
-	return p;
-}
+#include "maps.h"
 
 room_node	*new_room_node(room_pair value, int col) {
-	room_node	*n = malloc(sizeof(room_node));
+	room_node	*n = safe_malloc(sizeof(room_node), 1);
 	n->value = value;
 	n->col = col;
 	n->par = NULL;
@@ -36,15 +29,6 @@ void	clear_room_map(room_map *mp) {
 	clear_room_node(mp->root);
 	mp->root = NULL;
 	mp->size = 0;
-}
-
-room_node	*front_room(room_map *mp) {
-	if (!mp->root)
-		return NULL;
-	room_node	*cur = mp->root;
-	while (cur->left)
-		cur = cur->left; 
-	return cur;
 }
 
 void	leftRotate(room_map *mp, room_node *node) {

@@ -1,9 +1,11 @@
 #pragma once
 
-#include <string.h>
+#include </usr/include/string.h>
 
-static inline uint	len(char *s) {
-	uint	len = 0;
+#include "types.h"
+
+static inline u64	len(char *s) {
+	u64	len = 0;
 
 	while (s[len])
 		++len;
@@ -18,7 +20,7 @@ static inline bool	contains(char *s, char c) {
 	return (false);
 }
 
-static inline int	uint_string_size(int n) {
+static inline int	u64_string_size(int n) {
 	int len = 0;
 
 	do {

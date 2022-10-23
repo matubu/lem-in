@@ -1,0 +1,15 @@
+{
+	"files.associations": {
+		"stdlib.h": "c",
+		"stdbool.h": "c",
+		"string.h": "c",
+		"safe_malloc.h": "c",
+		"solve.h": "c",
+		"types.h": "c",
+		"vec.h": "c",
+		"stdint.h": "c",
+		"time.h": "c",
+		"maps.h": "c",
+		"utils.h": "c"
+	}
+}

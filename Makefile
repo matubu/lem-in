@@ -1,9 +1,9 @@
 Name         = lem_in
-Flags        = -Wall -Wextra -Werror -O3 -include src/def.h
-# Flags        = -include src/def.h
+Flags        = -Wall -Wextra -Werror -O3
+Flags       += -I src -include src/warn_unsafe_malloc.h
 Flags       += -fsanitize=address -g
-Sources      = $(wildcard src/*.c)
-Dependencies = $(wildcard src/*.h) Makefile
+Sources      = $(shell find src/ -type f -name '*.c')
+Dependencies = $(shell find src/ -type f -name '*.h') Makefile
 Objects      = $(patsubst src/%.c,bin/%.o,$(Sources))
 Jobs         = 16
 
@@ -15,7 +15,7 @@ all:
 	@make --jobs $(Jobs) --no-print-directory $(Name)
 
 bin/%.o: src/%.c $(Dependencies)
-	@mkdir -p bin
+	@mkdir -p $(dir $@)
 	@gcc $(Flags) $< -o $@ -c
 	@$(Print) -n "$(LogPre)\x1b[1;92mCOMPIL$(LogPost)" $<
 

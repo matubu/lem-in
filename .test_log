@@ -50,7 +50,7 @@
 
 === map/tests/hardPath ===
 [90m      0.00s [1;94mFarm parsed[0m
-[90m      0.01s [1;94mSolution found[0m
+[90m      0.00s [1;94mSolution found[0m
 ##START
 ##END
 
@@ -61,10 +61,10 @@
 
 
 
-[90m      0.01s [1;94mSolution printed[0m
-[90m      0.01s [1;94mSolution freed[0m
-[90m      0.01s [1;94mSolved[0m
-[90m      0.01s [1;94mFarm cleaned up[0m
+[90m      0.00s [1;94mSolution printed[0m
+[90m      0.00s [1;94mSolution freed[0m
+[90m      0.00s [1;94mSolved[0m
+[90m      0.00s [1;94mFarm cleaned up[0m
 4
 5
 5
@@ -332,14 +332,14 @@ L1-1 L2-2 L1-4 L2-3 L3-1 L4-2 L2-4 L3-4 L4-3 L5-1 L6-2 L4-4 L5-4 L6-3 L7-1 L8-2 
 
 === map/tests/sym-link ===
 [90m      0.00s [1;94mFarm parsed[0m
-[90m      0.01s [1;94mSolution found[0m
+[90m      0.00s [1;94mSolution found[0m
 ##START
 ##END
 
-[90m      0.01s [1;94mSolution printed[0m
-[90m      0.01s [1;94mSolution freed[0m
-[90m      0.01s [1;94mSolved[0m
-[90m      0.01s [1;94mFarm cleaned up[0m
+[90m      0.00s [1;94mSolution printed[0m
+[90m      0.00s [1;94mSolution freed[0m
+[90m      0.00s [1;94mSolved[0m
+[90m      0.00s [1;94mFarm cleaned up[0m
 a 0 0
 b 0 0
 a-b
@@ -352,7 +352,7 @@ b-a
 
 === map/tests/test ===
 [90m      0.00s [1;94mFarm parsed[0m
-[90m      0.01s [1;94mSolution found[0m
+[90m      0.00s [1;94mSolution found[0m
 ##START
 ##END
 
@@ -361,10 +361,10 @@ b-a
 
 
 
-[90m      0.01s [1;94mSolution printed[0m
-[90m      0.01s [1;94mSolution freed[0m
-[90m      0.01s [1;94mSolved[0m
-[90m      0.01s [1;94mFarm cleaned up[0m
+[90m      0.00s [1;94mSolution printed[0m
+[90m      0.00s [1;94mSolution freed[0m
+[90m      0.00s [1;94mSolved[0m
+[90m      0.00s [1;94mFarm cleaned up[0m
 3
 4
 5

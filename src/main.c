@@ -1,11 +1,6 @@
-#include <time.h>
-#include <stdio.h>
-#include "lem_in.h"
-#include "parse.h"
-#include "string.h"
-#include "uint_map.h"
-
-void	solve(t_farm *farm);
+#include "io.h"
+#include "parse/parse.h"
+#include "solve.h"
 
 void	lem_in(char *filename) {
 	t_farm	*farm = parse_farm(filename);
