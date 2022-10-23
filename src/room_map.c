@@ -17,7 +17,7 @@ room_node	*new_room_node(room_pair value, int col) {
 	return n;
 }
 
-void	init_room_map(room_map *mp, int (*cmp)(char *, char *)) {
+void	init_room_map(room_map *mp, bool (*cmp)(char *, char *)) {
 	mp->root = NULL;
 	mp->size = 0;
 	mp->cmp = cmp;

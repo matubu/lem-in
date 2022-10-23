@@ -2,8 +2,8 @@
 
 #include <string.h>
 
-static inline size_t	len(char *s) {
-	size_t	len = 0;
+static inline uint	len(char *s) {
+	uint	len = 0;
 
 	while (s[len])
 		++len;
@@ -18,7 +18,7 @@ static inline bool	contains(char *s, char c) {
 	return (false);
 }
 
-static inline int	int_string_size(int n) {
+static inline int	uint_string_size(int n) {
 	int len = 0;
 
 	do {
@@ -45,6 +45,6 @@ static inline bool	is_var(char c) {
 	return (is_alphanum(c) || c == '_');
 }
 
-int greater_str(char *s1, char *s2);
-int less_str(char *s1, char *s2);
-int equal_str(char *s1, char *s2);
+bool	greater_str(char *s1, char *s2);
+bool	less_str(char *s1, char *s2);
+bool	equal_str(char *s1, char *s2);

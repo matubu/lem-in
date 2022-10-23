@@ -13,11 +13,11 @@ typedef struct {
 	t_room		**rooms;
 	/* (name -> room) */
 	room_map	rooms_map;
-	size_t		nb_ants;
-	size_t		nb_rooms;
+	uint		nb_ants;
+	uint		nb_rooms;
 
 	/* Private */
-	size_t		_indexing;
+	uint		_indexing;
 	t_room		*_start_room;
 	t_room		*_end_room;
 }	t_farm;

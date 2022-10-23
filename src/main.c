@@ -3,7 +3,7 @@
 #include "lem_in.h"
 #include "parse.h"
 #include "string.h"
-#include "int_map.h"
+#include "uint_map.h"
 
 void	solve(t_farm *farm);
 

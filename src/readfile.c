@@ -21,22 +21,22 @@ char	*readfile(char *filename) {
 char	**readfile_lines(char *filename) {
 	char	*s = readfile(filename);
 
-	size_t	lines_count = 1;
-	for (size_t i = 0; s[i]; ++i) {
+	uint	lines_count = 1;
+	for (uint i = 0; s[i]; ++i) {
 		if (s[i] == '\n')
 			++lines_count;
 	}
 
 	char	**lines = tmalloc(char *, lines_count + 1);
 
-	size_t	idx = 0;
-	size_t	i = 0;
+	uint	idx = 0;
+	uint	i = 0;
 
 	while (1) {
 		// test\ntest\0
 		// ^     ^  start of strings
 
-		size_t	end = i;
+		uint	end = i;
 		while (s[end] && s[end] != '\n') {
 			++end;
 		}

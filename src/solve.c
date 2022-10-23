@@ -1,82 +1,92 @@
 #include "parse.h"
-#include "int_map.h"
+#include "uint_map.h"
 
+#define ACTION_WAIT INF
 
-void djikstra(vec *graph, vec *costs, int_map *available, int_map *from, int n) {
+void	djikstra(vec *graph, vec *costs, uint_map *available, uint_map *from, uint n) {
 	// store visited nodes
-	vec vis;
+	vec	vis;
 	init_vec(&vis, n, 0);
 
 	// stock known cost to go to each node with cheaper cost first
-	int_map pq;
-	init_int_map(&pq, less);
+	uint_map	pq;
+	init_uint_map(&pq, less);
 
 	// djikstra
-	insert_int(&pq, make_int_pair(0, 0));
+	insert_uint(&pq, make_uint_pair(0, 0));
 	while (pq.size) {
 		// get top element and pop it
-		int_pair cur = top_int(&pq)->value; pop_int(&pq);
+		uint_pair	cur = top_uint(&pq)->value;
+		pop_uint(&pq);
 
 		// u -> current node idx
-		int u = cur.second;
+		int	u = cur.second;
 
 		vis.at(u) = 1;
 
 		// get cost from u to each neighbor (v) and update costs if needed
-		for (int i = graph[cur.second].size - 1; i >= 0; i--) {
-			int v = graph[cur.second].at(i), cost;
+		for (uint i = 0; i < graph[cur.second].size; i++) {
+			uint	v = graph[cur.second].at(i),
+					cost;
 
 			// if v is visited or cheaper cost to v is known then skip
-			if (vis.at(v) || (cost = upper_bound_int(available + v, cur.first)->value.first) > costs->at(v))
+			if (vis.at(v) || (cost = upper_bound_uint(available + v, cur.first)->value.first) > costs->at(v)) {
 				continue;
+			}
 
 			// update cost
 			costs->at(v) = cost;
-			insert_int(&pq, make_int_pair(cost, v));
-			erase_int(from, v);
-			insert_int(from, make_int_pair(v, u));
+			insert_uint(&pq, make_uint_pair(cost, v));
+			erase_uint(from, v);
+			insert_uint(from, make_uint_pair(v, u));
 		}
 	}
 
-	clear_int_map(&pq);
+	clear_uint_map(&pq);
 	clear_vec(&vis);
 
+	printf("%u\n", costs->at(n - 1));
 	// check if end is reachable
 	if (costs->at(n - 1) == INF) {
 		die("No path found");
 	}
 }
 
-void generate_path(vec *path, vec *costs, int_map *available, int_map *from, int n) {
-	int cur = n - 1;
-	int turn = costs->at(cur);
+void	generate_path(vec *path, vec *costs, uint_map *available, uint_map *from, uint n) {
+	uint	cur = n - 1;
+	uint	turn = costs->at(cur);
+
 	while (1) {
 		// add waiting turn
-		while (turn > costs->at(cur))
-			push_back(path, -1), turn--;
+		while (turn > costs->at(cur)) {
+			push_back(path, ACTION_WAIT);
+			turn--;
+		}
 
 		// reserve room at given turn
 		if (cur != n - 1)
-			erase_int(available + cur, costs->at(cur));
+			erase_uint(available + cur, costs->at(cur));
 
 		// add move to path
 		push_back(path, cur);
 
 		if (cur == 0)
 			break;
-		int_node *prev = get_int(from, cur);
+
+		uint_node	*prev = get_uint(from, cur);
 		cur = prev->value.second;
 		turn--;
 	}
+
 	reverse_vec(path);
 }
 
-void find_path(vec *graph, int n, int_map *available, vec *path) {
-	int_map from;
-	init_int_map(&from, less);
+void find_path(vec *graph, uint n, uint_map *available, vec *path) {
+	uint_map	from;
+	init_uint_map(&from, less);
 
-	vec costs;
-	init_vec(&costs, n, 2147483647);
+	vec	costs;
+	init_vec(&costs, n, INF);
 	costs.at(0) = 0;
 
 	djikstra(graph, &costs, available, &from, n);
@@ -84,44 +94,45 @@ void find_path(vec *graph, int n, int_map *available, vec *path) {
 	generate_path(path, &costs, available, &from, n);
 
 	clear_vec(&costs);
-	clear_int_map(&from);
+	clear_uint_map(&from);
 }
 
-void print_connection(vec *graph, vec *vis, t_room **rooms, int u) {
+void print_connection(vec *graph, vec *vis, t_room **rooms, uint u) {
 	if (vis->at(u)) return;
 	vis->at(u) = 1;
-	for (int i = 0; i < graph[u].size; i++) {
+	for (uint i = 0; i < graph[u].size; i++) {
 		printf("%s-%s\n", rooms[u]->name, rooms[graph[u].at(i)]->name);
 		print_connection(graph, vis, rooms, graph[u].at(i));
 	}
 }
 
-void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
-	printf("%d\n", m);
-	for (int i = 0; i < n; i++) {
+void	print_solution(vec *graph, vec *paths, uint n, uint m, t_room **rooms) {
+	for (uint i = 0; i < n; i++) {
 		if (i == 0)
 			FD_PUT(1, "##START\n");
 		else if (i == n - 1)
 			FD_PUT(1, "##END\n");
-		printf("%s %zu %zu\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
+		printf("%s %u %u\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
 	}
 
-	vec vis;
+	vec	vis;
 	init_vec(&vis, n, 0);
 
-	for (int i = 0; i < n; i++)
+	for (uint i = 0; i < n; i++)
 		if (!vis.at(i))
 			print_connection(graph, &vis, rooms, i);
 
 	FD_PUT(1, "\n");
-	int f = 1;
+	int	f = 1;
 
-	for (int i = 1; f; i++) {
+	for (uint i = 1; f; i++) {
 		f = 0;
-		for (int j = 0; j < m; j++) {
-			if (paths[j].size <= i || paths[j].at(i) == -1) continue;
+		for (uint j = 0; j < m; j++) {
+			if (paths[j].size <= i || paths[j].at(i) == ACTION_WAIT) {
+				continue;
+			}
 			f = 1;
-			printf("L%d-%s ", j + 1, rooms[paths[j].at(i)]->name);
+			printf("L%u-%s ", j + 1, rooms[paths[j].at(i)]->name);
 		}
 		if (f) {
 			FD_PUT(1, "\n");
@@ -131,37 +142,38 @@ void print_solution(vec *graph, vec *paths, int n, int m, t_room **rooms) {
 	clear_vec(&vis);
 }
 
-void solve(t_farm *farm) {
-	vec *graph = farm->graph;
-	int n = farm->nb_rooms;
-	int m = farm->nb_ants;
+void	solve(t_farm *farm) {
+	vec		*graph = farm->graph;
+	uint	n = farm->nb_rooms;
+	uint	m = farm->nb_ants;
 
 	// init and fill available
-	int_map available[n];
-	for (int i = 0; i < n; i++) {
-		init_int_map(available + i, less);
-		for (int j = 0; j < n + m - 1; j++)
-			insert_int(available + i, make_int_pair(j, 0));
+	uint_map	available[n];
+	for (uint i = 0; i < n; i++) {
+		init_uint_map(available + i, less);
+		for (uint j = 0; j < n + m - 1; j++) {
+			insert_uint(available + i, make_uint_pair(j, 0));
+		}
 	}
 
 	// init paths
 	vec paths[m];
-	for (int i = 0; i < m; i++)
-		init_vec(paths + i, 0, 0);
-
 	// generate path for each ant
-	for (int i = 0; i < m; i++)
+	for (uint i = 0; i < m; i++) {
+		init_vec(paths + i, 0, 0);
 		find_path(graph, n, available, paths + i);
+	}
+
 	LOG("Solution found");
 
 	print_solution(graph, paths, n, m, farm->rooms);
 	LOG("Solution printed");
 
 	// free stuff
-	for (int i = 0; i < n; i++) {
-		clear_int_map(available + i);
+	for (uint i = 0; i < n; i++) {
+		clear_uint_map(available + i);
 	}
-	for (int i = 0; i < m; i++) {
+	for (uint i = 0; i < m; i++) {
 		clear_vec(paths + i);
 	}
 	LOG("Solution freed");

@@ -45,6 +45,7 @@ test: all
 		echo -e "\n\n=== $$file ==="; \
 		./$(Name) $$file; \
 	done > .test_log 2>&1
-	@diff -u .test_log_ref .test_log
+	@echo -e ' - Right click select to compare \x1b[100m./.test_log\x1b[0m'
+	@echo -e ' - Right click compare with selected \x1b[100m./.test_log_ref\x1b[0m'
 
 .PHONY: all re clean fclean run update_test_ref test

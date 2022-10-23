@@ -1,44 +1,22 @@
 
 
+=== map/tests/complexe ===
+[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/complexe:7804:11
+[1;94m7804 |  [0m41_28-41_28[90m⮰[0m
+                  [1;91m↑ Cannot create circular link[0m
+
+
 === map/tests/double-path ===
-[90m      0.01s [1;94mFarm parsed[0m
-[90m      0.01s [1;94mSolution found[0m
-##START
-##END
+[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/double-path:7:3
+[1;94m7 |  [0ma-b[90m⮰[0m
+       [1;91m↑ Link redefinition[0m
 
-
-[90m      0.01s [1;94mSolution printed[0m
-[90m      0.01s [1;94mSolution freed[0m
-[90m      0.01s [1;94mSolved[0m
-[90m      0.01s [1;94mFarm cleaned up[0m
-1
-a 0 0
-b 0 0
-a-b
-b-a
-b-a
-a-b
-L1-b 
 
 === map/tests/double-path-reverse ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
-##START
-##END
+[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/double-path-reverse:7:3
+[1;94m7 |  [0mb-a[90m⮰[0m
+       [1;91m↑ Link redefinition[0m
 
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
-1
-a 0 0
-b 0 0
-a-b
-b-a
-b-a
-a-b
-L1-b 
 
 === map/tests/empty-file ===
 [1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-file:1:0
@@ -69,6 +47,82 @@ L1-b
 [1;94m3 |  [0m[90m⮰[0m
     [1;91m↑ Expected a variable[0m
 
+
+=== map/tests/hardPath ===
+[90m      0.00s [1;94mFarm parsed[0m
+[90m      0.01s [1;94mSolution found[0m
+##START
+##END
+
+
+
+
+
+
+
+
+[90m      0.01s [1;94mSolution printed[0m
+[90m      0.01s [1;94mSolution freed[0m
+[90m      0.01s [1;94mSolved[0m
+[90m      0.01s [1;94mFarm cleaned up[0m
+4
+5
+5
+6
+6
+6
+7
+7
+7
+start 0 2
+r1 0 0
+r4 2 0
+r6 4 0
+r2 1 1
+r5 3 1
+r3 2 2
+r7 4 2
+r8 5 2
+r12 5 3
+r9 3 4
+r10 4 4
+r11 5 4
+end 6 2
+start-r1
+r1-start
+r1-r4
+r4-r1
+r4-r6
+r6-r4
+r6-r8
+r8-r6
+r8-r7
+r7-r5
+r5-r2
+r2-start
+r2-r5
+r5-r7
+r7-r3
+r3-start
+r3-r7
+r3-r9
+r9-r3
+r9-r10
+r10-r9
+r10-r11
+r11-r10
+r11-end
+end-r8
+end-r12
+r12-r7
+r12-end
+end-r11
+r7-r8
+r7-r12
+r8-end
+start-r2
+start-r3
+L1-r3 L2-r2 L3-r1 L1-r7 L2-r5 L3-r4 L4-r3 L5-r2 L6-r1 L1-r12 L2-r7 L3-r6 L4-r9 L5-r5 L6-r4 L7-r3 L8-r2 L9-r1 L1-end L2-r12 L3-r8 L4-r10 L5-r7 L6-r6 L7-r9 L8-r5 L9-r4 L2-end L3-end L4-r11 L5-r12 L6-r8 L7-r10 L8-r7 L9-r6 L4-end L5-end L6-end L7-r11 L8-r12 L9-r8 L7-end L8-end L9-end 
 
 === map/tests/incomplete-room1 ===
 [1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/incomplete-room1:4:2
@@ -175,6 +229,7 @@ L1-b
 === map/tests/noSolution ===
 [90m      0.00s [1;94mFarm parsed[0m
 [1;91mError[0m: No path found
+4294967295
 
 
 === map/tests/no-such-variable ===
@@ -213,6 +268,56 @@ L1-b
      [1;91m↑ Missing links[0m
 
 
+=== map/tests/self-connect ===
+[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/self-connect:6:3
+[1;94m6 |  [0ma-a[90m⮰[0m
+       [1;91m↑ Cannot create circular link[0m
+
+
+=== map/tests/simple ===
+[90m      0.00s [1;94mFarm parsed[0m
+[90m      0.00s [1;94mSolution found[0m
+##START
+##END
+
+
+
+
+
+
+
+
+[90m      0.00s [1;94mSolution printed[0m
+[90m      0.00s [1;94mSolution freed[0m
+[90m      0.00s [1;94mSolved[0m
+[90m      0.00s [1;94mFarm cleaned up[0m
+2
+3
+3
+4
+4
+5
+5
+6
+6
+7
+0 2 0
+1 0 2
+2 4 2
+3 4 4
+4 2 6
+0-1
+1-0
+1-4
+4-3
+3-2
+2-0
+2-3
+3-4
+4-1
+0-2
+L1-1 L2-2 L1-4 L2-3 L3-1 L4-2 L2-4 L3-4 L4-3 L5-1 L6-2 L4-4 L5-4 L6-3 L7-1 L8-2 L6-4 L7-4 L8-3 L9-1 L10-2 L8-4 L9-4 L10-3 L10-4 
+
 === map/tests/single-connection ===
 [1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/single-connection:4:2
 [1;94m4 |  [0m## end[90m⮰[0m
@@ -227,15 +332,14 @@ L1-b
 
 === map/tests/sym-link ===
 [90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+[90m      0.01s [1;94mSolution found[0m
 ##START
 ##END
 
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
-0
+[90m      0.01s [1;94mSolution printed[0m
+[90m      0.01s [1;94mSolution freed[0m
+[90m      0.01s [1;94mSolved[0m
+[90m      0.01s [1;94mFarm cleaned up[0m
 a 0 0
 b 0 0
 a-b
@@ -246,8 +350,62 @@ b-a
 [1;91mError[0m: Could not open file: Too many levels of symbolic links
 
 
+=== map/tests/test ===
+[90m      0.00s [1;94mFarm parsed[0m
+[90m      0.01s [1;94mSolution found[0m
+##START
+##END
+
+
+
+
+
+
+[90m      0.01s [1;94mSolution printed[0m
+[90m      0.01s [1;94mSolution freed[0m
+[90m      0.01s [1;94mSolved[0m
+[90m      0.01s [1;94mFarm cleaned up[0m
+3
+4
+5
+A 0 1
+B 1 0
+C 3 0
+D 4 1
+E 2 1
+F 3 2
+G 5 2
+H 6 1
+A-B
+B-A
+B-C
+C-B
+C-D
+D-E
+E-A
+E-D
+E-F
+F-E
+F-D
+F-G
+G-F
+G-H
+H-D
+H-G
+D-C
+D-H
+D-F
+A-E
+L1-E L2-B L1-D L2-C L3-E L1-H L2-D L3-F L2-H L3-G L3-H 
+
 === map/tests/this-is-a-folder ===
 [1;91mError[0m: Could not read: Is a directory
+
+
+=== map/tests/tmp ===
+[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/tmp:584:8
+[1;94m584 |  [0mr16-r159[90m⮰[0m
+              [1;91m↑ Link redefinition[0m
 
 
 === map/tests/unexpected-whitespace ===
@@ -278,7 +436,6 @@ b-a
 [90m      0.00s [1;94mSolution freed[0m
 [90m      0.00s [1;94mSolved[0m
 [90m      0.00s [1;94mFarm cleaned up[0m
-0
 a 0 0
 b 0 0
 a-b

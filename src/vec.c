@@ -1,18 +1,18 @@
 #include "lem_in.h"
 
-void	init_vec(vec *v, int size, int val) {
-	v->arr = malloc(sizeof(int) * size);
+void	init_vec(vec *v, uint size, int val) {
+	v->arr = malloc(sizeof(uint) * size);
 	v->size = size;
 	v->capacity = size;
-	for (int i = 0; i < size; i++)
+	for (uint i = 0; i < size; i++)
 		v->arr[i] = val;
 }
 
-int	push_back(vec *v, int val) {
+bool	push_back(vec *v, uint val) {
 	if (v->size == v->capacity) {
 		v->capacity = (v->capacity ? v->capacity * 2 : 1);
-		int *tmp = malloc(sizeof(int) * v->capacity);
-		ft_memcpy(tmp, v->arr, sizeof(int) * v->size);
+		uint	*tmp = malloc(sizeof(uint) * v->capacity);
+		ft_memcpy(tmp, v->arr, sizeof(uint) * v->size);
 		free(v->arr);
 		v->arr = tmp;
 	}
@@ -27,7 +27,7 @@ void	pop_back(vec *v) {
 }
 
 void	reverse_vec(vec *v) {
-	for (int i = 0; i < v->size / 2; i++) {
+	for (uint i = 0; i < v->size / 2; i++) {
 		int tmp = v->arr[i];
 		v->arr[i] = v->arr[v->size - i - 1];
 		v->arr[v->size - i - 1] = tmp;

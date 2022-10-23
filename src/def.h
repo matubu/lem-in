@@ -9,7 +9,7 @@
 
 #include "io.h"
 
-static inline void	*_safe_malloc(size_t n) {
+static inline void	*_safe_malloc(uint n) {
 	void	*ptr = malloc(n); \
 	EXPECT(ptr != NULL, "Could not allocate"); \
 	return (ptr); \

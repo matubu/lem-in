@@ -55,7 +55,7 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 
 		// Init graph
 		farm->graph = tmalloc(vec, farm->nb_rooms);
-		for (size_t i = 0; i < farm->nb_rooms; ++i) {
+		for (uint i = 0; i < farm->nb_rooms; ++i) {
 			init_vec(farm->graph + i, 0, 0);
 		}
 
@@ -65,8 +65,8 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 
 		// Mode end room to n - 1
 		t_room *tmp = farm->_end_room;
-		size_t	id_end = farm->_end_room->id;
-		size_t	id_swap = farm->nb_rooms - 1;
+		uint	id_end = farm->_end_room->id;
+		uint	id_swap = farm->nb_rooms - 1;
 		farm->rooms[id_swap]->id = id_end;
 		farm->rooms[id_end]->id = id_swap;
 		farm->rooms[id_end] = farm->rooms[id_swap];
@@ -83,8 +83,14 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 	room_node	*node_b = get_room(&farm->rooms_map, b);
 	P_EXPECT(node_b, it, "No such variable");
 
-	size_t	id_a = node_a->value.second.id;
-	size_t	id_b = node_b->value.second.id;
+	uint	id_a = node_a->value.second.id;
+	uint	id_b = node_b->value.second.id;
+
+	P_EXPECT(id_a != id_b, it, "Cannot create circular link");
+	for (uint i = 0; i < farm->graph[id_a].size; ++i) {
+		P_EXPECT(id_b != farm->graph[id_a].at(i), it, "Link redefinition");
+	}
+
 	push_back(farm->graph + id_a, id_b);
 	push_back(farm->graph + id_b, id_a);
 
@@ -150,7 +156,7 @@ t_farm	*parse_farm(char *filename) {
 
 void	free_farm(t_farm *farm) {
 	clear_room_map(&farm->rooms_map);
-	for (size_t i = 0; i < farm->nb_rooms; ++i) {
+	for (uint i = 0; i < farm->nb_rooms; ++i) {
 		clear_vec(farm->graph + i);
 	}
 	free(farm->graph);
