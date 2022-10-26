@@ -41,13 +41,13 @@ typedef struct {
 
 
 static inline void	parsing_error(LineIterator *it, char *s) {
-	dprintf(2, "\033[1;91mError\033[0;90m(parsing)\033[0m");
-	dprintf(2, "\033[1;94m ➔  \033[0m%s:%lu:%lu\n", it->filename, it->line + 1, it->idx);
+	dprintf(2, "\033[1;91mError\033[0m: ");
+	dprintf(2, "\033[4m%s:%lu:%lu\033[0m\n", it->filename, it->line + 1, it->idx);
 
 	int	offset = u64_string_size(it->line + 1);
 
 	dprintf(2, "\033[1;94m%lu |  \033[0m%s\033[90m⮰\033[0m\n", it->line + 1, it->ptr);
-	dprintf(2, "%*s   %*s\033[1;91m↑ %s\033[0m\n", offset, "", (int)it->idx, "", s);
+	dprintf(2, "%*s   %*s\033[1;92m↑ %s\033[0m\n", offset, "", (int)it->idx, "", s);
 	exit(1);
 }
 

@@ -7,11 +7,11 @@ fn input(varname: &str, min: usize) -> usize {
 	print!("\x1B[1;94mNumber of {varname}\x1B[0m: ");
 	std::io::stdout().flush().unwrap();
 
-    let mut buffer = String::new();
-    std::io::stdin().read_line(&mut buffer).unwrap();
+	let mut buffer = String::new();
+	std::io::stdin().read_line(&mut buffer).unwrap();
 
 	match buffer.trim().parse::<usize>() {
-        Ok(res) => {
+		Ok(res) => {
 			if res < min {
 				println!("\x1B[1;91mError\x1B[0m: Should at least have {min} {varname}");
 				return input(varname, min);

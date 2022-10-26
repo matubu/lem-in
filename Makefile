@@ -37,6 +37,8 @@ run: all
 	@$(Print) "$(LogPre)\x1b[1;96mLAUNCH$(LogPost)" ./$(Name)
 	@./$(Name)
 
+.PHONY: all re clean fclean run
+
 update_test_ref:
 	cp .test_log .test_log_ref
 
@@ -45,7 +47,12 @@ test: all
 		echo -e "\n\n=== $$file ==="; \
 		./$(Name) $$file; \
 	done > .test_log 2>&1
-	@echo -e ' - Right click select to compare \x1b[100m./.test_log\x1b[0m'
-	@echo -e ' - Right click compare with selected \x1b[100m./.test_log_ref\x1b[0m'
+	@echo -e ' - Right click select to compare \x1b[4m./.test_log\x1b[0m'
+	@echo -e ' - Right click compare with selected \x1b[4m./.test_log_ref\x1b[0m'
 
-.PHONY: all re clean fclean run update_test_ref test
+.PHONY: update_test_ref test
+
+gen:
+	cd gen && cargo run
+
+.PHONY: gen

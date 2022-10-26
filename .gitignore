@@ -2,3 +2,4 @@ bin
 a.out
 lem_in
 target
+zig-cache
