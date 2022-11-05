@@ -1,4 +1,4 @@
-#include "readfile.h"
+#include "readall.h"
 
 #define READALL_SIZE 4096
 

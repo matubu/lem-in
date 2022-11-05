@@ -2,7 +2,7 @@
 
 #include "../allocator/safe_malloc.h"
 #include "parsing_iterator.h"
-#include "readfile/readfile.h"
+#include "readall/readall.h"
 #include "containers/maps.h"
 #include "containers/vec.h"
 
@@ -18,6 +18,8 @@ typedef struct {
 	room_map	rooms_map;
 	u64			nb_ants;
 	u64			nb_rooms;
+
+	char		*comments;
 
 	/* Private */
 	u64			_indexing;

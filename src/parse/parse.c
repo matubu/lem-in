@@ -106,6 +106,7 @@ t_farm	*parse_farm_from_stdin() {
 	farm->_indexing = 1;
 	farm->_start_room = NULL;
 	farm->_end_room = NULL;
+	farm->comments = NULL;
 
 	// Parse the number of ants
 	LineIterator	line = next_line(&lines);
@@ -134,6 +135,9 @@ t_farm	*parse_farm_from_stdin() {
 				} else {
 					parsing_error(&line, "Can only be \"start\" or \"end\"");
 				}
+			} else {
+				ft_strjoin(&farm->comments, line.ptr);
+				ft_strjoin(&farm->comments, "\n");
 			}
 			continue ;
 		}
@@ -160,5 +164,6 @@ void	free_farm(t_farm *farm) {
 	}
 	free(farm->graph);
 	free(farm->rooms);
+	free(farm->comments);
 	free(farm);
 }

@@ -111,9 +111,12 @@ void print_connection(vec *graph, vec *vis, t_room **rooms, u64 u) {
 		print_connection(graph, vis, rooms, graph[u].at(i));
 }
 
-void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
+void	print_solution(t_farm *farm, vec *graph, vec *paths, u64 n, u64 m) {
 	fd_put_u64(1, m);
 	FD_PUT(1, "\n");
+	if (farm->comments) {
+		fd_put(1, farm->comments);
+	}
 	for (u64 i = 0; i < n; i++) {
 		if (i == 0) {
 			FD_PUT(1, "##START\n");
@@ -121,11 +124,11 @@ void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
 		else if (i == n - 1) {
 			FD_PUT(1, "##END\n");
 		}
-		fd_put(1, rooms[i]->name);
+		fd_put(1, farm->rooms[i]->name);
 		FD_PUT(1, " ");
-		fd_put_u64(1, rooms[i]->x);
+		fd_put_u64(1, farm->rooms[i]->x);
 		FD_PUT(1, " ");
-		fd_put_u64(1, rooms[i]->y);
+		fd_put_u64(1, farm->rooms[i]->y);
 		FD_PUT(1, "\n");
 	}
 
@@ -134,7 +137,7 @@ void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
 
 	for (u64 i = 0; i < n; i++)
 		if (!vis.at(i))
-			print_connection(graph, &vis, rooms, i);
+			print_connection(graph, &vis, farm->rooms, i);
 
 	FD_PUT(1, "\n");
 	int	f = 1;
@@ -149,7 +152,7 @@ void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
 			FD_PUT(1, "L");
 			fd_put_u64(1, j + 1);
 			FD_PUT(1, "-");
-			fd_put(1, rooms[paths[j].at(i)]->name);
+			fd_put(1, farm->rooms[paths[j].at(i)]->name);
 			FD_PUT(1, " ");
 		}
 		if (f) {
@@ -183,7 +186,7 @@ void	solve(t_farm *farm) {
 	}
 
 
-	print_solution(graph, paths, n, m, farm->rooms);
+	print_solution(farm, graph, paths, n, m);
 
 	// free stuff
 	for (u64 i = 0; i < n; i++) {

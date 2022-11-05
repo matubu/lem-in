@@ -3,12 +3,16 @@
 #include </usr/include/string.h>
 
 #include "types.h"
+#include "allocator/safe_malloc.h"
+#include "utils.h"
 
 static inline u64	len(char *s) {
 	u64	len = 0;
 
-	while (s[len])
-		++len;
+	if (s) {
+		while (s[len])
+			++len;
+	}
 	return (len);
 }
 
@@ -30,6 +34,8 @@ static inline int	u64_string_size(int n) {
 
 	return (len);
 }
+
+void	ft_strjoin(char **s1, char *s2);
 
 static inline bool	is_number(char c) {
 	return (c >= '0' && c <= '9');

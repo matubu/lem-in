@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "allocator/safe_malloc.h"
-#include "readfile/readfile.h"
+#include "readall/readall.h"
 #include "string.h"
 
 typedef struct {
