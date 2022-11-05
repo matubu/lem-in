@@ -96,9 +96,8 @@ void	parse_link(t_farm *farm, LineIterator *it) {
 	free(b);
 }
 
-t_farm	*parse_farm(char *filename) {
-	// Read the file and create a iterator
-	FileIterator	lines = create_file_iterator(filename);
+t_farm	*parse_farm_from_stdin() {
+	FileIterator	lines = create_stdin_iterator();
 
 	t_farm			*farm = safe_malloc(sizeof(t_farm), 1);
 	init_room_map(&farm->rooms_map, greater_str);

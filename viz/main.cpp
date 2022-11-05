@@ -11,10 +11,13 @@ typedef uint64_t u64;
 #define MARGIN 50
 #define SPEED 2.0
 
-sf::Texture loadTexture(const char *path) {
+string basedir = "./";
+
+sf::Texture loadTexture(const string &path) {
 	sf::Texture tex;
-	if (!tex.loadFromFile(path))
+	if (!tex.loadFromFile(path.c_str())) {
 		die("failed to load texture");
+	}
 	return tex;
 }
 
@@ -60,7 +63,7 @@ struct Ant {
 	vector<pair<u64, u64>>	sequence;
 
 	Ant(vector<pair<u64, u64>> seq) {
-		static sf::Texture texture = loadTexture("assets/ant.png");
+		static sf::Texture texture = loadTexture(basedir +"assets/ant.png");
 
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(SIZE / 2, SIZE / 2);
@@ -94,7 +97,7 @@ struct AntHill {
 	sf::Sprite sprite;
 
 	AntHill(pair<u64, u64> pos) {
-		static sf::Texture texture = loadTexture("assets/anthill.png");
+		static sf::Texture texture = loadTexture(basedir + "assets/anthill.png");
 
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(SIZE / 2, SIZE / 2);
@@ -110,7 +113,7 @@ struct Path {
 	sf::Sprite sprite;
 
 	Path(pair<u64, u64> from, pair<u64, u64> to) {
-		static sf::Texture texture = loadTexture("assets/path.png");
+		static sf::Texture texture = loadTexture(basedir + "assets/path.png");
 
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(0, SIZE / 2);
@@ -173,8 +176,11 @@ struct Timer {
 	}
 };
 
-int main()
-{
+int main(int ac, char **av) {
+	if (av) {
+		basedir = string(dirname(av[0])) + "/";
+	}
+
 	map<string, anthill> graph;
 	vector<vector<string>> solution;
 	string start = "", end = "";
@@ -216,7 +222,7 @@ int main()
 		ants.push_back(Ant(seq));
 	}
 
-	sf::Texture backgroundTexture = loadTexture("assets/background.png");
+	sf::Texture backgroundTexture = loadTexture(basedir + "assets/background.png");
 	sf::Sprite background(backgroundTexture);
 
 	Timer timer;

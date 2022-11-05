@@ -1,24 +1,29 @@
 #include "readfile.h"
 
-char	*readfile(char *filename) {
-	int	fd = open(filename, O_RDONLY);
-	EXPECT_ERRNO(fd != -1, "Could not open file");
+#define READALL_SIZE 4096
 
-	struct stat	stat;
-	EXPECT_ERRNO(fstat(fd, &stat) != -1, "Could not stat file");
+char	*readall(int fd) {
+	char	*buf = malloc(1);
+	size_t	len = 0;
 
-	char	*s = safe_malloc(sizeof(char), stat.st_size + 1);
+	while (1) {
+		char *new_buf = safe_malloc(sizeof(char), len + READALL_SIZE + 1);
+		ft_memcpy(new_buf, buf, len);
+		free(buf);
+		buf = new_buf;
+		int ret = read(fd, buf + len, READALL_SIZE);
+		if (ret <= 0) {
+			break ;
+		}
+		len += ret;
+	}
 
-	int len = read(fd, s, stat.st_size);
-	EXPECT_ERRNO(len != -1, "Could not read");
-
-	s[len] = '\0';
-
-	return (s);
+	buf[len] = '\0';
+	return (buf);
 }
 
-char	**readfile_lines(char *filename) {
-	char	*s = readfile(filename);
+char	**readall_lines(int fd) {
+	char	*s = readall(fd);
 
 	u64	lines_count = 1;
 	for (u64 i = 0; s[i]; ++i) {

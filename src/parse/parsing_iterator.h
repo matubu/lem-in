@@ -7,7 +7,6 @@
 #include "string.h"
 
 typedef struct {
-	char	*filename;
 	u64		idx;
 	char	**ptr;
 }	FileIterator;
@@ -15,11 +14,10 @@ typedef struct {
 /**
  * @note allocate memory (needs free)
  */
-static inline FileIterator	create_file_iterator(char *filename) {
-	char	**lines = readfile_lines(filename);
+static inline FileIterator	create_stdin_iterator() {
+	char	**lines = readall_lines(0);
 
 	return ((FileIterator){
-		.filename = filename,
 		.idx = 0,
 		.ptr = lines
 	});
@@ -33,7 +31,6 @@ static inline void	free_file_iterator(FileIterator *it) {
 
 
 typedef struct {
-	char		*filename;
 	u64			line;
 	u64			idx;
 	char		*ptr;
@@ -41,13 +38,7 @@ typedef struct {
 
 
 static inline void	parsing_error(LineIterator *it, char *s) {
-	FD_PUT(2, "\033[1;91mError\033[0m: \033[4m");
-	fd_put(2, it->filename);
-	fd_put(2, ":");
-	fd_put_u64(2, it->line + 1);
-	fd_put(2, ":");
-	fd_put_u64(2, it->idx);
-	FD_PUT(2, "\033[0m\n");
+	FD_PUT(2, "\033[1;91mError\033[0m:\n");
 
 	FD_PUT(2, "\033[1;94m");
 	fd_put_u64(2, it->line + 1);
@@ -79,7 +70,6 @@ static inline void	parsing_error(LineIterator *it, char *s) {
 
 static inline LineIterator	next_line(FileIterator *it) {
 	LineIterator	line_it = (LineIterator){
-		.filename = it->filename,
 		.line = it->idx,
 		.idx = 0,
 		.ptr = next(it)

@@ -6,7 +6,8 @@
 #include "allocator/safe_malloc.h"
 #include "types.h"
 #include "io.h"
+#include "utils.h"
 
-char	*readfile(char *filename);
-char	**readfile_lines(char *filename);
+char	*readall(int fd);
+char	**readall_lines(int fd);
 void	free_lines(char **lines);

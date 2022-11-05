@@ -1,9 +1,12 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <stdint.h>
 #include <cmath>
+#include <libgen.h>
 
 using namespace std;
 
@@ -21,11 +24,10 @@ template<typename Head, typename... Tail> static inline void dbg_out(Head H, Tai
 
 
 struct anthill {
-    pair<int, int> pos;
-    vector<string> out;
+	pair<int, int> pos;
+	vector<string> out;
 
-    anthill(pair<int,int> p = {0, 0}) : pos(p), out(0) {}
-
+	anthill(pair<int,int> p = {0, 0}) : pos(p), out(0) {}
 };
 
 void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &start, string &end);
