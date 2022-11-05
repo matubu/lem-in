@@ -9,6 +9,7 @@ typedef uint64_t u64;
 
 #define SIZE 1000
 #define MARGIN 50
+#define SPEED 2.0
 
 sf::Texture loadTexture(const char *path) {
 	sf::Texture tex;
@@ -70,10 +71,10 @@ struct Ant {
 		// and draw it
 		pair<u64, u64> prev = this->sequence[(int)time];
 		pair<u64, u64> next = this->sequence[(int)time + 1];
-		double t = time - (int)time;
+		float t = time - (int)time;
 
-		double x = prev.first * (1 - t) + next.first * t;
-		double y = prev.second * (1 - t) + next.second * t;
+		float x = prev.first * (1 - t) + next.first * t;
+		float y = prev.second * (1 - t) + next.second * t;
 
 		this->sprite.setPosition(x, y);
 		window.draw(this->sprite);
@@ -213,13 +214,19 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			if (event.type == sf::Event::KeyPressed) {
-				cout << event.key.code << endl;
 				switch (event.key.code) {
 					case sf::Keyboard::Escape:
 						window.close();
 						break;
 					case sf::Keyboard::Space:
 						timer.toggle();
+						break;
+					case sf::Keyboard::Right:
+						timer.runTime += 0.2;
+						break;
+					case sf::Keyboard::Left:
+						timer.runTime = fmax(fmin(timer.getElapsedSeconds(), (solution[0].size() - 1) * SPEED) - 0.2, 0)
+							- (timer.paused ? 0 : timer.clock.getElapsedTime().asSeconds());
 						break;
 					case sf::Keyboard::R:
 						timer.reset();
@@ -235,7 +242,7 @@ int main()
 		for (auto &antHill : antHills)
 			antHill.draw(window);
 		for (auto &ant : ants)
-			ant.draw(window, timer.getElapsedSeconds() / 2);
+			ant.draw(window, timer.getElapsedSeconds() / SPEED);
 
 		window.display();
 	}
