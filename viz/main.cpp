@@ -3,9 +3,11 @@
 using namespace std;
 
 typedef uint64_t u64;
+#define	u64_MAX		UINT64_MAX
+#define	u64_MIN		UINT64_MIN
 
 #define SIZE 1000
-
+#define MARGIN 50
 
 sf::Texture loadTexture(const char *path) {
 	sf::Texture tex;
@@ -21,16 +23,23 @@ struct Remaper {
 	u64	maxY;
 
 	Remaper(vector<pair<u64, u64>> antHills) {
-		// this->minX = ;
-		// this->minY = ;
-		// this->maxX = ;
-		// this->maxY = ;
+		this->minX = u64_MAX;
+		this->minY = u64_MAX;
+		this->maxX = u64_MIN;
+		this->maxY = u64_MIN;
+
+		for (auto &antHill : antHills) {
+			this->minX = min(this->minX, antHill.first);
+			this->minY = min(this->minY, antHill.second);
+			this->maxX = max(this->maxX, antHill.first);
+			this->maxY = max(this->maxY, antHill.second);
+		}
 	}
 
 	pair<u64, u64> remap(u64 x, u64 y) {
 		return make_pair(
-			(x - this->minX) * SIZE / (this->maxX - this->minX),
-			(y - this->minY) * SIZE / (this->maxY - this->minY)
+			(x - this->minX + MARGIN) * SIZE / (this->maxX - this->minX - 2 * MARGIN),
+			(y - this->minY + MARGIN) * SIZE / (this->maxY - this->minY - 2 * MARGIN)
 		);
 	}
 };
@@ -117,7 +126,6 @@ struct Timer {
 	void reset() {
 		clock.restart();
 		runTime = 0;
-		paused = false;
 	}
 
 	void start() {
@@ -207,12 +215,6 @@ int main()
 					case sf::Keyboard::Space:
 						timer.toggle();
 						break;
-					// case sf::Keyboard::Right:
-					// 	timer.runTime += 1;
-					// 	break;
-					// case sf::Keyboard::Left:
-					// 	timer.runTime = max(timer.runTime - 1, 0.0f);
-					// 	break;
 					case sf::Keyboard::R:
 						timer.reset();
 						break;
