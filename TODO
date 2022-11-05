@@ -1,5 +1,2 @@
-make solve more clean :)
 remove printf
-fix error cursor wrong offset (when last user a get)
-Double link problem on generator
 Handle case where anthill are in the same position (division by zero error)

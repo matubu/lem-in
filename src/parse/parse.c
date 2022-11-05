@@ -118,7 +118,9 @@ t_farm	*parse_farm(char *filename) {
 		line = next_line(&lines);
 
 		P_EXPECT(!is_whitespace(get(&line)), &line, "Unexpected whitespace");
-		P_EXPECT(get(&line) != '\0', &line, "Unexpected empty line");
+		if (get(&line) != '\0') {
+			continue ;
+		}
 		
 		if (get(&line) == '#') {
 			// Comment
