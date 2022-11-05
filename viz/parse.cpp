@@ -25,8 +25,14 @@ void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &s
     int n, idx;
 
     // parse number of ant
-    cin >> n;
-    cin.ignore();
+    while (1) {
+        string tmp;
+        getline(cin, tmp);
+        if (tmp[0] == '#')
+            continue;
+        n = stoi(tmp);
+        break;
+    }
 
     // Parse anthills
     while (1) {
