@@ -100,18 +100,27 @@ void print_connection(vec *graph, vec *vis, t_room **rooms, u64 u) {
 	if (vis->at(u)) return;
 	vis->at(u) = 1;
 	for (u64 i = 0; i < graph[u].size; i++) {
-		printf("%s-%s\n", rooms[u]->name, rooms[graph[u].at(i)]->name);
+		fd_put(1, rooms[u]->name);
+		FD_PUT(1, "-");
+		fd_put(1, rooms[graph[u].at(i)]->name);
 		print_connection(graph, vis, rooms, graph[u].at(i));
 	}
 }
 
 void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
 	for (u64 i = 0; i < n; i++) {
-		if (i == 0)
+		if (i == 0) {
 			FD_PUT(1, "##START\n");
-		else if (i == n - 1)
+		}
+		else if (i == n - 1) {
 			FD_PUT(1, "##END\n");
-		printf("%s %lu %lu\n", rooms[i]->name, rooms[i]->x, rooms[i]->y);
+		}
+		fd_put(1, rooms[i]->name);
+		FD_PUT(1, " ");
+		fd_put_u64(1, rooms[i]->x);
+		FD_PUT(1, " ");
+		fd_put_u64(1, rooms[i]->y);
+		FD_PUT(1, "\n");
 	}
 
 	vec	vis;
@@ -131,7 +140,11 @@ void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
 				continue;
 			}
 			f = 1;
-			printf("L%lu-%s ", j + 1, rooms[paths[j].at(i)]->name);
+			FD_PUT(1, "L");
+			fd_put_u64(1, j + 1);
+			FD_PUT(1, "-");
+			fd_put(1, rooms[paths[j].at(i)]->name);
+			FD_PUT(1, " ");
 		}
 		if (f) {
 			FD_PUT(1, "\n");

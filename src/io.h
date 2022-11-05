@@ -8,10 +8,21 @@
 
 #include "string.h"
 
-#define FD_PUT(fd, s) write(fd, s, sizeof(s) - 1)
+#define FD_PUT(fd, s) {if(write(fd, s, sizeof(s) - 1)){}}
 
 static inline void	fd_put(int fd, char *s) {
-	write(fd, s, len(s));	
+	if(write(fd, s, len(s))){}	
+}
+
+static inline void fd_put_u64(int fd, u64 n) {
+	char	buf[64];
+	int		i = 64;
+
+	do {
+		buf[--i] = n % 10 + '0';
+		n /= 10;
+	} while (n);
+	if(write(fd, buf + i, 64 - i)){}
 }
 
 static inline void	die_errno(char *s) {

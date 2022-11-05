@@ -4,9 +4,7 @@
 
 #include <unistd.h>
 
-//test
-
-#define PUTS_ERROR(s) write(2, s "\n", sizeof(s))
+#define PUTS_ERROR(s) {if(write(2, s "\n", sizeof(s))){}}
 
 static inline void	*safe_malloc(size_t type_size, size_t n) {
 	void	*ptr = malloc(type_size * n);

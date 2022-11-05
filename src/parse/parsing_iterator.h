@@ -41,7 +41,7 @@ typedef struct {
 
 
 static inline void	parsing_error(LineIterator *it, char *s) {
-	dprintf(2, "\033[1;91mError\033[0m: ");
+	FD_PUT(2, "\033[1;91mError\033[0m: ");
 	dprintf(2, "\033[4m%s:%lu:%lu\033[0m\n", it->filename, it->line + 1, it->idx);
 
 	int	offset = u64_string_size(it->line + 1);

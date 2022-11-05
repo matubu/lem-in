@@ -2,3 +2,4 @@ make solve more clean :)
 remove printf
 fix error cursor wrong offset (when last user a get)
 Check if the link exist on the generator
+make visualizer
