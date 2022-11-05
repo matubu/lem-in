@@ -15,10 +15,10 @@ typedef uint64_t	u64;
 #define	u32_MAX		UINT32_MAX
 #define	u64_MAX		UINT64_MAX
 
-#define	u8_MIN		UINT8_MIN
-#define	u16_MIN		UINT16_MIN
-#define	u32_MIN		UINT32_MIN
-#define	u64_MIN		UINT64_MIN
+#define	u8_MIN		0
+#define	u16_MIN		0
+#define	u32_MIN		0
+#define	u64_MIN		0
 
 /**********/
 /* Signed */

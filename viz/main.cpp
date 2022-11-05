@@ -4,7 +4,7 @@ using namespace std;
 
 typedef uint64_t u64;
 #define	u64_MAX		UINT64_MAX
-#define	u64_MIN		UINT64_MIN
+#define	u64_MIN		0
 
 #define SIZE 1000
 #define MARGIN 50
