@@ -22,24 +22,25 @@ struct Remaper {
 	u64	minY;
 	u64	maxY;
 
-	Remaper(vector<pair<u64, u64>> antHills) {
+	Remaper(const map<string, anthill> &antsHills) {
 		this->minX = u64_MAX;
 		this->minY = u64_MAX;
 		this->maxX = u64_MIN;
 		this->maxY = u64_MIN;
 
-		for (auto &antHill : antHills) {
-			this->minX = min(this->minX, antHill.first);
-			this->minY = min(this->minY, antHill.second);
-			this->maxX = max(this->maxX, antHill.first);
-			this->maxY = max(this->maxY, antHill.second);
+		for (auto &antHill : antsHills) {
+			this->minX = min(this->minX, (u64)antHill.second.pos.first);
+			this->minY = min(this->minY, (u64)antHill.second.pos.second);
+			this->maxX = max(this->maxX, (u64)antHill.second.pos.first);
+			this->maxY = max(this->maxY, (u64)antHill.second.pos.second);
 		}
 	}
 
-	pair<u64, u64> remap(u64 x, u64 y) {
+	pair<u64, u64> remap(const pair<u64, u64> &pos) {
+		// TODO handle 0 diff
 		return make_pair(
-			(x - this->minX + MARGIN) * SIZE / (this->maxX - this->minX - 2 * MARGIN),
-			(y - this->minY + MARGIN) * SIZE / (this->maxY - this->minY - 2 * MARGIN)
+			(pos.first - this->minX) * (SIZE - 2 * MARGIN) / (this->maxX - this->minX) + MARGIN,
+			(pos.second - this->minY) * (SIZE - 2 * MARGIN) / (this->maxY - this->minY) + MARGIN
 		);
 	}
 };
@@ -103,6 +104,7 @@ struct Path {
 
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(0, SIZE / 2);
+		// TODO handle negative size
 		this->sprite.setScale(sqrt(pow(to.first - from.first, 2) + pow(to.second - from.second, 2)) / SIZE, .02);
 		this->sprite.setPosition(from.first, from.second);
 		this->sprite.setRotation(atan2(to.second - from.second, to.first - from.first) * 180 / M_PI);
@@ -165,65 +167,38 @@ int main()
 	string start = "", end = "";
 	parse(graph, solution, start, end);
 
+	sf::RenderWindow window(sf::VideoMode(SIZE, SIZE), "lem-in");
+
 	int n = solution.size(); // number of ants
 	int m = graph.size(); // number of nodes
 
-	dbg(solution[0]);
-
-	//cout << "GRAPH : " << endl;
-	//for (auto &it : graph) {
-		//cout << it.first << " " << it.second.pos << ": \n ";
-		//for (int j = 0; j < it.second.out.size(); j++) {
-			//cout << it.second.out[j] << " ";
-		//}
-		//cout << endl;
-	//}
-
-	//cout << "PATHS : " << endl;
-	//for (int i = 0; i < paths.size(); i++) {
-		//for (int j = 0; j < paths[i].size(); j++) {
-			//cout << paths[i][j] << " ";
-		//}
-		//cout << endl;
-	//}
-
-	sf::RenderWindow window(sf::VideoMode(SIZE, SIZE), "lem-in");
-
-	//vector<AntHill> antHills = {
-		//AntHill(make_pair(200, 200)),
-		//AntHill(make_pair(300, 350))
-	//};
-	//Path path(make_pair(200, 200), make_pair(300, 350));
-	//Ant ant(vector<pair<u64, u64>>{
-		//make_pair(200, 200),
-		//make_pair(300, 350)
-	//});
+	Remaper remaper(graph);
 
 	vector<AntHill> antHills;
 	vector<Path> paths;
+
 	for (auto &it : graph) {
-		antHills.push_back(AntHill(it.second.pos));
+		antHills.push_back(AntHill(remaper.remap(it.second.pos)));
 		for (int j = 0; j < it.second.out.size(); j++) {
-			//dbg(it.second.pos);
-			//dbg(graph[it.second.out[j]].pos);
 			if (it.second.out[j] < it.first)
 				continue;
-			paths.push_back(Path(it.second.pos, graph[it.second.out[j]].pos));
+			paths.push_back(Path(
+				remaper.remap(it.second.pos),
+				remaper.remap(graph[it.second.out[j]].pos)
+			));
 		}
 	}
-
-	//Path paths(make_pair(200, 200), make_pair(300, 350));
 
 	vector<Ant> ants;
 	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < solution[i].size() - 1; j++) {
-			ants.push_back(Ant({
-				graph[solution[i][j]].pos,
-				graph[solution[i][j + 1]].pos
-			}));
-		}
-	}
+		vector<pair<u64, u64>> seq;
 
+		for (int j = 0; j < solution[i].size(); j++) {
+			seq.push_back(remaper.remap(graph[solution[i][j]].pos));
+		}
+
+		ants.push_back(Ant(seq));
+	}
 
 	Timer timer;
 
