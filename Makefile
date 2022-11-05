@@ -1,6 +1,7 @@
 Name         = lem_in
-Flags        = -Wall -Wextra -Werror -O3
-Flags       += -I src -include src/warn_unsafe_malloc.h
+#Flags        = -Wall -Wextra -Werror -O3
+Flags        = -O3
+Flags       += -I src
 Flags       += -fsanitize=address -g
 Sources      = $(shell find src/ -type f -name '*.c')
 Dependencies = $(shell find src/ -type f -name '*.h') Makefile

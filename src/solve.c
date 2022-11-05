@@ -100,14 +100,20 @@ void print_connection(vec *graph, vec *vis, t_room **rooms, u64 u) {
 	if (vis->at(u)) return;
 	vis->at(u) = 1;
 	for (u64 i = 0; i < graph[u].size; i++) {
-		fd_put(1, rooms[u]->name);
-		FD_PUT(1, "-");
-		fd_put(1, rooms[graph[u].at(i)]->name);
-		print_connection(graph, vis, rooms, graph[u].at(i));
+		if (!vis->at(graph[u].at(i))) {
+			fd_put(1, rooms[u]->name);
+			FD_PUT(1, "-");
+			fd_put(1, rooms[graph[u].at(i)]->name);
+			FD_PUT(1, "\n");
+		}
 	}
+	for (u64 i = 0; i < graph[u].size; i++)
+		print_connection(graph, vis, rooms, graph[u].at(i));
 }
 
 void	print_solution(vec *graph, vec *paths, u64 n, u64 m, t_room **rooms) {
+	fd_put_u64(1, m);
+	FD_PUT(1, "\n");
 	for (u64 i = 0; i < n; i++) {
 		if (i == 0) {
 			FD_PUT(1, "##START\n");

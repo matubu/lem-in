@@ -10,6 +10,8 @@
 		"stdint.h": "c",
 		"time.h": "c",
 		"maps.h": "c",
-		"utils.h": "c"
+		"utils.h": "c",
+		"xtr1common": "cpp",
+		"ostream": "cpp"
 	}
 }

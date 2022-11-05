@@ -1,6 +1,6 @@
 #pragma once
 
-#include "allocator/safe_malloc.h"
+#include "../allocator/safe_malloc.h"
 #include "utils.h"
 #include "types.h"
 

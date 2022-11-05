@@ -3,7 +3,6 @@
 #undef malloc
 
 #include <unistd.h>
-
 #define PUTS_ERROR(s) {if(write(2, s "\n", sizeof(s))){}}
 
 static inline void	*safe_malloc(size_t type_size, size_t n) {
@@ -15,5 +14,3 @@ static inline void	*safe_malloc(size_t type_size, size_t n) {
 	}
 	return (ptr);
 }
-
-#include "warn_unsafe_malloc.h"

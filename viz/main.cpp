@@ -1,5 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "viz.hpp"
 
 void die(const char *msg) {
 	std::cerr << "\x1b[91merror\x1b[0m" << msg << std::endl;
@@ -13,8 +12,15 @@ sf::Texture loadTexture(const char *path) {
 	return tex;
 }
 
-int main()
-{
+int main() {
+
+	map<string, anthill> graph;
+	vector<vector<string>> paths;
+	string start, end;
+	parse(graph, paths, start, end);
+
+
+
 	sf::RenderWindow window(sf::VideoMode(800, 800), "lem-in");
 
 	sf::Texture antTex = loadTexture("assets/ant.png");

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "allocator/safe_malloc.h"
+#include "../allocator/safe_malloc.h"
 #include "parsing_iterator.h"
 #include "readfile/readfile.h"
 #include "containers/maps.h"
