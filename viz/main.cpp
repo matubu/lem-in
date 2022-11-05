@@ -105,7 +105,10 @@ struct Path {
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(0, SIZE / 2);
 		// TODO handle negative size
-		this->sprite.setScale(sqrt(pow(to.first - from.first, 2) + pow(to.second - from.second, 2)) / SIZE, .02);
+		const double scale = sqrt(pow(to.first - from.first, 2) + pow(to.second - from.second, 2)) / SIZE;
+		// TODO bug div by zero
+		cout << "scale: " << scale << from << to << endl;
+		this->sprite.setScale(scale, .02);
 		this->sprite.setPosition(from.first, from.second);
 		this->sprite.setRotation(atan2(to.second - from.second, to.first - from.first) * 180 / M_PI);
 	}
@@ -180,6 +183,7 @@ int main()
 	for (auto &it : graph) {
 		antHills.push_back(AntHill(remaper.remap(it.second.pos)));
 		for (int j = 0; j < it.second.out.size(); j++) {
+			// TODO seems like some paths are drawn twice
 			if (it.second.out[j] < it.first)
 				continue;
 			paths.push_back(Path(
