@@ -38,7 +38,6 @@ struct Remaper {
 	}
 
 	pair<u64, u64> remap(const pair<u64, u64> &pos) {
-		// TODO handle 0 diff
 		return make_pair(
 			(pos.first - this->minX) * (SIZE - 2 * MARGIN) / (this->maxX - this->minX) + MARGIN,
 			(pos.second - this->minY) * (SIZE - 2 * MARGIN) / (this->maxY - this->minY) + MARGIN
@@ -184,7 +183,6 @@ int main()
 	for (auto &it : graph) {
 		antHills.push_back(AntHill(remaper.remap(it.second.pos)));
 		for (int j = 0; j < it.second.out.size(); j++) {
-			// TODO seems like some paths are drawn twice
 			if (it.second.out[j] < it.first)
 				continue;
 			paths.push_back(Path(
