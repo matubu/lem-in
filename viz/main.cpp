@@ -186,6 +186,10 @@ int main(int ac, char **av) {
 	string start = "", end = "";
 	parse(graph, solution, start, end);
 
+	if (solution.size() == 0) {
+		die("no ants");
+	}
+
 	dbg(start);
 	dbg(end);
 

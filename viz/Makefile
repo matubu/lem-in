@@ -8,7 +8,14 @@ Flags += -lsfml-graphics -lsfml-window -lsfml-system
 all:
 	g++ $(Sources) -o $(Name) $(Flags)
 
+clean:
+
+fclean: clean
+	rm -rf $(Name)
+
+re: fclean all
+
 run: all
 	./$(Name)
 
-.PHONY: all run
+.PHONY: all clean fclean re run
