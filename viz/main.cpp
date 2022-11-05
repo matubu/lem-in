@@ -161,41 +161,69 @@ struct Timer {
 int main()
 {
 	map<string, anthill> graph;
-	vector<vector<string>> paths;
+	vector<vector<string>> solution;
 	string start = "", end = "";
-	parse(graph, paths, start, end);
+	parse(graph, solution, start, end);
 
-	int n = paths.size(); // number of ants
+	int n = solution.size(); // number of ants
 	int m = graph.size(); // number of nodes
 
-	cout << "GRAPH : " << endl;
-	for (auto &it : graph) {
-		cout << it.first << " " << it.second.pos << ": \n ";
-		for (int j = 0; j < it.second.out.size(); j++) {
-			cout << it.second.out[j] << " ";
-		}
-		cout << endl;
-	}
+	dbg(solution[0]);
 
-	cout << "PATHS : " << endl;
-	for (int i = 0; i < paths.size(); i++) {
-		for (int j = 0; j < paths[i].size(); j++) {
-			cout << paths[i][j] << " ";
-		}
-		cout << endl;
-	}
+	//cout << "GRAPH : " << endl;
+	//for (auto &it : graph) {
+		//cout << it.first << " " << it.second.pos << ": \n ";
+		//for (int j = 0; j < it.second.out.size(); j++) {
+			//cout << it.second.out[j] << " ";
+		//}
+		//cout << endl;
+	//}
+
+	//cout << "PATHS : " << endl;
+	//for (int i = 0; i < paths.size(); i++) {
+		//for (int j = 0; j < paths[i].size(); j++) {
+			//cout << paths[i][j] << " ";
+		//}
+		//cout << endl;
+	//}
 
 	sf::RenderWindow window(sf::VideoMode(SIZE, SIZE), "lem-in");
 
-	vector<AntHill> antHills = {
-		AntHill(make_pair(200, 200)),
-		AntHill(make_pair(300, 350))
-	};
-	Path path(make_pair(200, 200), make_pair(300, 350));
-	Ant ant(vector<pair<u64, u64>>{
-		make_pair(200, 200),
-		make_pair(300, 350)
-	});
+	//vector<AntHill> antHills = {
+		//AntHill(make_pair(200, 200)),
+		//AntHill(make_pair(300, 350))
+	//};
+	//Path path(make_pair(200, 200), make_pair(300, 350));
+	//Ant ant(vector<pair<u64, u64>>{
+		//make_pair(200, 200),
+		//make_pair(300, 350)
+	//});
+
+	vector<AntHill> antHills;
+	vector<Path> paths;
+	for (auto &it : graph) {
+		antHills.push_back(AntHill(it.second.pos));
+		for (int j = 0; j < it.second.out.size(); j++) {
+			//dbg(it.second.pos);
+			//dbg(graph[it.second.out[j]].pos);
+			if (it.second.out[j] < it.first)
+				continue;
+			paths.push_back(Path(it.second.pos, graph[it.second.out[j]].pos));
+		}
+	}
+
+	//Path paths(make_pair(200, 200), make_pair(300, 350));
+
+	vector<Ant> ants;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < solution[i].size() - 1; j++) {
+			ants.push_back(Ant({
+				graph[solution[i][j]].pos,
+				graph[solution[i][j + 1]].pos
+			}));
+		}
+	}
+
 
 	Timer timer;
 
@@ -224,10 +252,12 @@ int main()
 
 		window.clear(sf::Color(0x937675ff));
 
-		path.draw(window);
+		for (auto &path: paths)
+			path.draw(window);
 		for (auto &antHill : antHills)
 			antHill.draw(window);
-		ant.draw(window, timer.getElapsedSeconds() / 2);
+		for (auto &ant : ants)
+			ant.draw(window, timer.getElapsedSeconds() / 2);
 
 		window.display();
 	}
