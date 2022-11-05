@@ -112,11 +112,11 @@ void print_connection(vec *graph, vec *vis, t_room **rooms, u64 u) {
 }
 
 void	print_solution(t_farm *farm, vec *graph, vec *paths, u64 n, u64 m) {
-	fd_put_u64(1, m);
-	FD_PUT(1, "\n");
 	if (farm->comments) {
 		fd_put(1, farm->comments);
 	}
+	fd_put_u64(1, m);
+	FD_PUT(1, "\n");
 	for (u64 i = 0; i < n; i++) {
 		if (i == 0) {
 			FD_PUT(1, "##START\n");
