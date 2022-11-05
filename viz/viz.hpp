@@ -31,3 +31,8 @@ struct anthill {
 };
 
 void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &start, string &end);
+
+static inline void die(const char *msg) {
+	std::cerr << "\x1b[91merror\x1b[0m" << msg << std::endl;
+	exit(1);
+}

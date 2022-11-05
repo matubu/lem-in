@@ -6,10 +6,6 @@ typedef uint64_t u64;
 
 #define SIZE 1000
 
-void die(const char *msg) {
-	std::cerr << "\x1b[91merror\x1b[0m" << msg << std::endl;
-	exit(1);
-}
 
 sf::Texture loadTexture(const char *path) {
 	sf::Texture tex;
@@ -107,8 +103,28 @@ int main()
 {
 	map<string, anthill> graph;
 	vector<vector<string>> paths;
-	string start, end;
+	string start = "", end = "";
 	parse(graph, paths, start, end);
+
+	int n = paths.size(); // number of ants
+	int m = graph.size(); // number of nodes
+
+	cout << "GRAPH : " << endl;
+	for (auto &it : graph) {
+		cout << it.first << " " << it.second.pos << ": \n ";
+		for (int j = 0; j < it.second.out.size(); j++) {
+			cout << it.second.out[j] << " ";
+		}
+		cout << endl;
+	}
+
+	cout << "PATHS : " << endl;
+	for (int i = 0; i < paths.size(); i++) {
+		for (int j = 0; j < paths[i].size(); j++) {
+			cout << paths[i][j] << " ";
+		}
+		cout << endl;
+	}
 
 	sf::RenderWindow window(sf::VideoMode(SIZE, SIZE), "lem-in");
 
