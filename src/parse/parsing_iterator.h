@@ -43,7 +43,9 @@ static inline void	parsing_error(LineIterator *it, char *s) {
 	FD_PUT(2, "\033[1;94m");
 	fd_put_u64(2, it->line + 1);
 	FD_PUT(2, " |  \033[0m");
-	fd_put(2, it->ptr);
+	if (it->ptr) {
+		fd_put(2, it->ptr);
+	}
 	FD_PUT(2, "\033[90m⮰\033[0m\n");
 
 	int	offset = u64_string_size(it->line + 1);

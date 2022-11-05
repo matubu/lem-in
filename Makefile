@@ -46,7 +46,7 @@ update_test_ref:
 test: all
 	@for file in map/tests/*; do \
 		echo -e "\n\n=== $$file ==="; \
-		./$(Name) $$file; \
+		./$(Name) < $$file; \
 	done > .test_log 2>&1
 	@echo -e ' - Right click select to compare \x1b[4m./.test_log\x1b[0m'
 	@echo -e ' - Right click compare with selected \x1b[4m./.test_log_ref\x1b[0m'

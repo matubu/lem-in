@@ -1,70 +1,80 @@
 
 
 === map/tests/complexe ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/complexe:7804:11
+[1;91mError[0m:
 [1;94m7804 |  [0m41_28-41_28[90m⮰[0m
-                  [1;91m↑ Cannot create circular link[0m
+                  [1;92m^ Cannot create circular link[0m
 
 
 === map/tests/double-path ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/double-path:7:3
+[1;91mError[0m:
 [1;94m7 |  [0ma-b[90m⮰[0m
-       [1;91m↑ Link redefinition[0m
+       [1;92m^ Link redefinition[0m
 
 
 === map/tests/double-path-reverse ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/double-path-reverse:7:3
+[1;91mError[0m:
 [1;94m7 |  [0mb-a[90m⮰[0m
-       [1;91m↑ Link redefinition[0m
+       [1;92m^ Link redefinition[0m
 
 
 === map/tests/empty-file ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-file:1:0
+[1;91mError[0m:
 [1;94m1 |  [0m[90m⮰[0m
-    [1;91m↑ Expected a positive number[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/empty-file2 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-file2:1:0
+[1;91mError[0m:
 [1;94m1 |  [0m[90m⮰[0m
-    [1;91m↑ Expected a positive number[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/empty-line ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-line:23:0
-[1;94m23 |  [0m[90m⮰[0m
-     [1;91m↑ Unexpected empty line[0m
+3
+##START
+A 0 1
+B 1 0
+C 3 0
+D 4 1
+E 2 1
+F 3 2
+G 5 2
+##END
+H 6 1
+A-B
+A-E
+B-C
+C-D
+D-E
+D-H
+D-F
+E-F
+F-G
+G-H
+
+L1-E L2-B 
+L1-D L2-C L3-E 
+L1-H L2-D L3-F 
+L2-H L3-G 
+L3-H 
 
 
 === map/tests/empty-line-after-end ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-line-after-end:3:0
+[1;91mError[0m:
 [1;94m3 |  [0m[90m⮰[0m
-    [1;91m↑ Expected a variable[0m
+    [1;92m^ Expected a variable[0m
 
 
 === map/tests/empty-line-after-start ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/empty-line-after-start:3:0
+[1;91mError[0m:
 [1;94m3 |  [0m[90m⮰[0m
-    [1;91m↑ Expected a variable[0m
+    [1;92m^ Expected a variable[0m
 
 
 === map/tests/hardPath ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+9
 ##START
-##END
-
-
-
-
-
-
-
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
 start 0 2
 r1 0 0
 r4 2 0
@@ -78,273 +88,236 @@ r12 5 3
 r9 3 4
 r10 4 4
 r11 5 4
+##END
 end 6 2
 start-r1
-r1-start
-r1-r4
-r4-r1
-r4-r6
-r6-r4
-r6-r8
-r8-r6
-r8-r7
-r7-r5
-r5-r2
-r2-start
-r2-r5
-r5-r7
-r7-r3
-r3-start
-r3-r7
-r3-r9
-r9-r3
-r9-r10
-r10-r9
-r10-r11
-r11-r10
-r11-end
-end-r8
-end-r12
-r12-r7
-r12-end
-end-r11
-r7-r8
-r7-r12
-r8-end
 start-r2
 start-r3
-L1-r3 L2-r2 L3-r1 L1-r7 L2-r5 L3-r4 L4-r3 L5-r2 L6-r1 L1-r12 L2-r7 L3-r6 L4-r9 L5-r5 L6-r4 L7-r3 L8-r2 L9-r1 L1-end L2-r12 L3-r8 L4-r10 L5-r7 L6-r6 L7-r9 L8-r5 L9-r4 L2-end L3-end L4-r11 L5-r12 L6-r8 L7-r10 L8-r7 L9-r6 L4-end L5-end L6-end L7-r11 L8-r12 L9-r8 L7-end L8-end L9-end 
+r1-r4
+r4-r6
+r6-r8
+r8-r7
+r8-end
+r7-r5
+r7-r3
+r7-r12
+r5-r2
+r3-r9
+r9-r10
+r10-r11
+r11-end
+end-r12
+
+L1-r3 L2-r2 L3-r1 
+L1-r7 L2-r5 L3-r4 L4-r3 L5-r2 L6-r1 
+L1-r12 L2-r7 L3-r6 L4-r9 L5-r5 L6-r4 L7-r3 L8-r2 L9-r1 
+L1-end L2-r12 L3-r8 L4-r10 L5-r7 L6-r6 L7-r9 L8-r5 L9-r4 
+L2-end L3-end L4-r11 L5-r12 L6-r8 L7-r10 L8-r7 L9-r6 
+L4-end L5-end L6-end L7-r11 L8-r12 L9-r8 
+L7-end L8-end L9-end 
+
 
 === map/tests/incomplete-room1 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/incomplete-room1:4:2
+[1;91mError[0m:
 [1;94m4 |  [0mB [90m⮰[0m
-      [1;91m↑ Expected a positive number[0m
+      [1;92m^ Expected a positive number[0m
 
 
 === map/tests/incomplete-room2 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/incomplete-room2:4:4
+[1;91mError[0m:
 [1;94m4 |  [0mB 1[90m⮰[0m
-        [1;91m↑ Expected a whitespace[0m
+        [1;92m^ Expected a whitespace[0m
 
 
 === map/tests/incomplete-room3 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/incomplete-room3:4:4
+[1;91mError[0m:
 [1;94m4 |  [0mB 1 [90m⮰[0m
-        [1;91m↑ Expected a positive number[0m
+        [1;92m^ Expected a positive number[0m
 
 
 === map/tests/incomplete-room4 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/incomplete-room4:4:2
+[1;91mError[0m:
 [1;94m4 |  [0mB[90m⮰[0m
-      [1;91m↑ Expected a whitespace[0m
+      [1;92m^ Expected a whitespace[0m
 
 
 === map/tests/invalid-number-ants ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/invalid-number-ants:1:1
+[1;91mError[0m:
 [1;94m1 |  [0m5 a a[90m⮰[0m
-     [1;91m↑ Expected eol, should only contains the number of ants[0m
+     [1;92m^ Expected eol, should only contains the number of ants[0m
 
 
 === map/tests/missing-end ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-end:11:0
+[1;91mError[0m:
 [1;94m11 |  [0mA-B[90m⮰[0m
-     [1;91m↑ Missing end room[0m
+     [1;92m^ Missing end room[0m
 
 
 === map/tests/missing-first-line ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-first-line:1:0
+[1;91mError[0m:
 [1;94m1 |  [0ma 5 5[90m⮰[0m
-    [1;91m↑ Expected a positive number[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/missing-flagged-room ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-flagged-room:10:0
+[1;91mError[0m:
 [1;94m10 |  [0mA-B[90m⮰[0m
-     [1;91m↑ Missing start room[0m
+     [1;92m^ Missing start room[0m
 
 
 === map/tests/missing-line-after-end ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-line-after-end:3:0
-[1;94m3 |  [0m(null)[90m⮰[0m
-    [1;91m↑ unexpected end of file[0m
+[1;91mError[0m:
+[1;94m3 |  [0m[90m⮰[0m
+    [1;92m^ unexpected end of file[0m
 
 
 === map/tests/missing-line-after-start ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-line-after-start:3:0
-[1;94m3 |  [0m(null)[90m⮰[0m
-    [1;91m↑ unexpected end of file[0m
+[1;91mError[0m:
+[1;94m3 |  [0m[90m⮰[0m
+    [1;92m^ unexpected end of file[0m
 
 
 === map/tests/missing-start ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/missing-start:11:0
+[1;91mError[0m:
 [1;94m11 |  [0mA-B[90m⮰[0m
-     [1;91m↑ Missing start room[0m
+     [1;92m^ Missing start room[0m
 
 
 === map/tests/nb-ants-overflow ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/nb-ants-overflow:1:20
+[1;91mError[0m:
 [1;94m1 |  [0m18446744073709551616[90m⮰[0m
-                        [1;91m↑ Missing links[0m
+                        [1;92m^ Missing links[0m
 
 
 === map/tests/negative-coordinate ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/negative-coordinate:3:2
+[1;91mError[0m:
 [1;94m3 |  [0ma -1 -1[90m⮰[0m
-      [1;91m↑ Expected a positive number[0m
+      [1;92m^ Expected a positive number[0m
 
 
 === map/tests/negative-coordinate-x ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/negative-coordinate-x:3:2
+[1;91mError[0m:
 [1;94m3 |  [0ma -1 1[90m⮰[0m
-      [1;91m↑ Expected a positive number[0m
+      [1;92m^ Expected a positive number[0m
 
 
 === map/tests/negative-coordinate-y ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/negative-coordinate-y:3:4
+[1;91mError[0m:
 [1;94m3 |  [0ma 1 -1[90m⮰[0m
-        [1;91m↑ Expected a positive number[0m
+        [1;92m^ Expected a positive number[0m
 
 
 === map/tests/negative-numbers-ants ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/negative-numbers-ants:1:0
+[1;91mError[0m:
 [1;94m1 |  [0m-1[90m⮰[0m
-    [1;91m↑ Expected a positive number[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/no-connection ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/no-connection:10:2
+[1;91mError[0m:
 [1;94m10 |  [0m##end[90m⮰[0m
-       [1;91m↑ Missing links[0m
+       [1;92m^ Missing links[0m
 
 
 === map/tests/noSolution ===
-[90m      0.00s [1;94mFarm parsed[0m
 [1;91mError[0m: No path found
 
 
 === map/tests/no-such-variable ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/no-such-variable:23:4
+[1;91mError[0m:
 [1;94m23 |  [0mZTES-Y[90m⮰[0m
-         [1;91m↑ No such variable[0m
+         [1;92m^ No such variable[0m
 
 
 === map/tests/not-eol ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/not-eol:20:3
+[1;91mError[0m:
 [1;94m20 |  [0mF-G   [90m⮰[0m
-        [1;91m↑ Expected eol[0m
+        [1;92m^ Expected eol[0m
 
 
 === map/tests/not-eol2 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/not-eol2:10:2
+[1;91mError[0m:
 [1;94m10 |  [0m##end [90m⮰[0m
-       [1;91m↑ Can only be "start" or "end"[0m
+       [1;92m^ Can only be "start" or "end"[0m
 
 
 === map/tests/not-eol3 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/not-eol3:1:1
+[1;91mError[0m:
 [1;94m1 |  [0m3 [90m⮰[0m
-     [1;91m↑ Expected eol, should only contains the number of ants[0m
+     [1;92m^ Expected eol, should only contains the number of ants[0m
 
 
 === map/tests/not-whitespace1 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/not-whitespace1:9:4
+[1;91mError[0m:
 [1;94m9 |  [0mG 5+2[90m⮰[0m
-        [1;91m↑ Expected a whitespace[0m
+        [1;92m^ Expected a whitespace[0m
 
 
 === map/tests/only-ants-count ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/only-ants-count:1:1
+[1;91mError[0m:
 [1;94m1 |  [0m5[90m⮰[0m
-     [1;91m↑ Missing links[0m
+     [1;92m^ Missing links[0m
 
 
 === map/tests/self-connect ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/self-connect:6:3
+[1;91mError[0m:
 [1;94m6 |  [0ma-a[90m⮰[0m
-       [1;91m↑ Cannot create circular link[0m
+       [1;92m^ Cannot create circular link[0m
 
 
 === map/tests/simple ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+10
 ##START
-##END
-
-
-
-
-
-
-
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
 0 2 0
 1 0 2
 2 4 2
 3 4 4
+##END
 4 2 6
 0-1
-1-0
+0-2
 1-4
 4-3
 3-2
-2-0
-2-3
-3-4
-4-1
-0-2
-L1-1 L2-2 L1-4 L2-3 L3-1 L4-2 L2-4 L3-4 L4-3 L5-1 L6-2 L4-4 L5-4 L6-3 L7-1 L8-2 L6-4 L7-4 L8-3 L9-1 L10-2 L8-4 L9-4 L10-3 L10-4 
+
+L1-1 L2-2 
+L1-4 L2-3 L3-1 L4-2 
+L2-4 L3-4 L4-3 L5-1 L6-2 
+L4-4 L5-4 L6-3 L7-1 L8-2 
+L6-4 L7-4 L8-3 L9-1 L10-2 
+L8-4 L9-4 L10-3 
+L10-4 
+
 
 === map/tests/single-connection ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/single-connection:4:2
+[1;91mError[0m:
 [1;94m4 |  [0m## end[90m⮰[0m
-      [1;91m↑ Can only be "start" or "end"[0m
+      [1;92m^ Can only be "start" or "end"[0m
 
 
 === map/tests/space-before-start ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/space-before-start:2:2
+[1;91mError[0m:
 [1;94m2 |  [0m## start[90m⮰[0m
-      [1;91m↑ Can only be "start" or "end"[0m
+      [1;92m^ Can only be "start" or "end"[0m
 
 
 === map/tests/sym-link ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+0
 ##START
-##END
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
 a 0 0
+##END
 b 0 0
 a-b
-b-a
+
 
 
 === map/tests/sym-link-circular ===
-[1;91mError[0m: Could not open file: Too many levels of symbolic links
+/bin/sh: line 3: map/tests/sym-link-circular: Too many levels of symbolic links
 
 
 === map/tests/test ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+3
 ##START
-##END
-
-
-
-
-
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
 A 0 1
 B 1 0
 C 3 0
@@ -352,68 +325,61 @@ D 4 1
 E 2 1
 F 3 2
 G 5 2
+##END
 H 6 1
 A-B
-B-A
+A-E
 B-C
-C-B
 C-D
 D-E
-E-A
-E-D
-E-F
-F-E
-F-D
-F-G
-G-F
-G-H
-H-D
-H-G
-D-C
 D-H
 D-F
-A-E
-L1-E L2-B L1-D L2-C L3-E L1-H L2-D L3-F L2-H L3-G L3-H 
+E-F
+F-G
+G-H
+
+L1-E L2-B 
+L1-D L2-C L3-E 
+L1-H L2-D L3-F 
+L2-H L3-G 
+L3-H 
+
 
 === map/tests/this-is-a-folder ===
-[1;91mError[0m: Could not read: Is a directory
+[1;91mError[0m:
+[1;94m1 |  [0m[90m⮰[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/tmp ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/tmp:584:8
+[1;91mError[0m:
 [1;94m584 |  [0mr16-r159[90m⮰[0m
-              [1;91m↑ Link redefinition[0m
+              [1;92m^ Link redefinition[0m
 
 
 === map/tests/unexpected-whitespace ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/unexpected-whitespace:1:0
+[1;91mError[0m:
 [1;94m1 |  [0m [90m⮰[0m
-    [1;91m↑ Expected a positive number[0m
+    [1;92m^ Expected a positive number[0m
 
 
 === map/tests/unexpected-whitespace2 ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/unexpected-whitespace2:2:0
+[1;91mError[0m:
 [1;94m2 |  [0m[90m⮰[0m
-    [1;91m↑ Unexpected empty line[0m
+    [1;92m^ Missing links[0m
 
 
 === map/tests/wrong-type ===
-[1;91mError[0;90m(parsing)[0m[1;94m ➔  [0mmap/tests/wrong-type:12:2
+[1;91mError[0m:
 [1;94m12 |  [0m##links[90m⮰[0m
-       [1;91m↑ Can only be "start" or "end"[0m
+       [1;92m^ Can only be "start" or "end"[0m
 
 
 === map/tests/zero-ants ===
-[90m      0.00s [1;94mFarm parsed[0m
-[90m      0.00s [1;94mSolution found[0m
+0
 ##START
-##END
-
-[90m      0.00s [1;94mSolution printed[0m
-[90m      0.00s [1;94mSolution freed[0m
-[90m      0.00s [1;94mSolved[0m
-[90m      0.00s [1;94mFarm cleaned up[0m
 a 0 0
+##END
 b 0 0
 a-b
-b-a
+
