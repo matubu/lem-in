@@ -34,15 +34,13 @@ void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &s
         if (line[0] == '#')
             continue;
         cur = split(line);
+        if (cur.size() != 3)
+            break;
         if (start == "") 
             start = cur[0];
         end = cur[0];
-        dbg(cur);
-        if (cur.size() != 3)
-            break;
         graph[cur[0]] = anthill({stoi(cur[1]), stoi(cur[2])});
     }
-
     // parse connection
     while (line != "") {
         int idx = line.find('-');
@@ -71,7 +69,6 @@ void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &s
 
             int ant = stoi(cur[i].substr(1, idx));
             string hill = cur[i].substr(idx + 1);
-
             cnt += (hill == end);
             paths[ant - 1].push_back(hill);
             mx = paths[ant - 1].size();
@@ -81,6 +78,5 @@ void parse(map<string, anthill> &graph, vector<vector<string>> &paths, string &s
         for (int i = 0; i < n; i++)
             if (paths[i].size() < mx)
                 paths[i].push_back(paths[i].back());
-        cnt++;
     }
 }

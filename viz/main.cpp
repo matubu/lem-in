@@ -171,6 +171,9 @@ int main()
 	string start = "", end = "";
 	parse(graph, solution, start, end);
 
+	dbg(start);
+	dbg(end);
+
 	sf::RenderWindow window(sf::VideoMode(SIZE, SIZE), "lem-in");
 
 	int n = solution.size(); // number of ants
