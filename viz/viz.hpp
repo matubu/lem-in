@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <map>
+#include <vector>
+#include <stdint.h>
+#include <cmath>
 
 using namespace std;
 
