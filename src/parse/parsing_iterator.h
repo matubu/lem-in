@@ -41,13 +41,28 @@ typedef struct {
 
 
 static inline void	parsing_error(LineIterator *it, char *s) {
-	FD_PUT(2, "\033[1;91mError\033[0m: ");
-	dprintf(2, "\033[4m%s:%lu:%lu\033[0m\n", it->filename, it->line + 1, it->idx);
+	FD_PUT(2, "\033[1;91mError\033[0m: \033[4m");
+	fd_put(2, it->filename);
+	fd_put(2, ":");
+	fd_put_u64(2, it->line + 1);
+	fd_put(2, ":");
+	fd_put_u64(2, it->idx);
+	FD_PUT(2, "\033[0m\n");
+
+	FD_PUT(2, "\033[1;94m");
+	fd_put_u64(2, it->line + 1);
+	FD_PUT(2, " |  \033[0m");
+	fd_put(2, it->ptr);
+	FD_PUT(2, "\033[90m⮰\033[0m\n");
 
 	int	offset = u64_string_size(it->line + 1);
 
-	dprintf(2, "\033[1;94m%lu |  \033[0m%s\033[90m⮰\033[0m\n", it->line + 1, it->ptr);
-	dprintf(2, "%*s   %*s\033[1;92m↑ %s\033[0m\n", offset, "", (int)it->idx, "", s);
+	for (int i = 0; i < offset + it->idx + 3; i++) {
+		FD_PUT(2, " ");
+	}
+	FD_PUT(2, "\033[1;92m^ ");
+	fd_put(2, s);
+	FD_PUT(2, "\033[0m\n");
 	exit(1);
 }
 

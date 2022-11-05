@@ -4,13 +4,10 @@
 
 void	lem_in(char *filename) {
 	t_farm	*farm = parse_farm(filename);
-	LOG("Farm parsed");
 
 	solve(farm);
-	LOG("Solved");
 
 	free_farm(farm);
-	LOG("Farm cleaned up");
 }
 
 int	main(int ac, char **av) {

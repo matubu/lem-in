@@ -13,8 +13,6 @@ template<typename Container,typename T = typename enable_if<!is_same<Container, 
 static inline void dbg_out() { cerr << endl; }
 template<typename Head, typename... Tail> static inline void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...);}
 
-#define DEBUG
-
 #ifdef DEBUG
 #define dbg(...) cerr << __LINE__ << ": " << #__VA_ARGS__ << " =", dbg_out(__VA_ARGS__);
 #else
