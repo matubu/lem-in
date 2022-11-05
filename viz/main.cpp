@@ -2,6 +2,7 @@
 
 using namespace std;
 
+typedef int64_t i64;
 typedef uint64_t u64;
 #define	u64_MAX		UINT64_MAX
 #define	u64_MIN		0
@@ -104,13 +105,13 @@ struct Path {
 
 		this->sprite = sf::Sprite(texture);
 		this->sprite.setOrigin(0, SIZE / 2);
-		// TODO handle negative size
-		const double scale = sqrt(pow(to.first - from.first, 2) + pow(to.second - from.second, 2)) / SIZE;
-		// TODO bug div by zero
-		cout << "scale: " << scale << from << to << endl;
-		this->sprite.setScale(scale, .02);
+
+		const i64 dx = (i64)to.first - (i64)from.first;
+		const i64 dy = (i64)to.second - (i64)from.second;
+
+		this->sprite.setScale(sqrt(pow(dx, 2) + pow(dy, 2)) / SIZE, .02);
 		this->sprite.setPosition(from.first, from.second);
-		this->sprite.setRotation(atan2(to.second - from.second, to.first - from.first) * 180 / M_PI);
+		this->sprite.setRotation(atan2(dy, dx) * 180 / M_PI);
 	}
 	void draw(sf::RenderWindow &window) {
 		window.draw(this->sprite);
