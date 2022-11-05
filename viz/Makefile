@@ -1,6 +1,7 @@
 Name = viz
 Sources = main.cpp
-Flags = -Wall -Wextra -Werror -O3
+Flags = -O3
+# Flags += -Wall -Wextra -Werror
 Flags += -lsfml-graphics -lsfml-window -lsfml-system
 
 all:
