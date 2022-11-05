@@ -47,9 +47,13 @@ struct Ant {
 		this->sprite.setScale(0.05, 0.05);
 		this->sequence = seq;
 	}
-	void draw(sf::RenderWindow &window, double time) {
-		if (time >= this->sequence.size() || time < 0)
-			return;
+	void draw(sf::RenderWindow &window, float time) {
+		if (time >= this->sequence.size() - 1) {
+			time = this->sequence.size() - 1.001;
+		}
+		if (time < 0) {
+			time = 0;
+		}
 		
 		// Do a interpolation/lerp between the two points
 		// to get the position of the ant at the given time
@@ -99,6 +103,53 @@ struct Path {
 	}
 };
 
+struct Timer {
+	sf::Clock clock;
+	float runTime;
+	bool paused;
+
+	Timer() {
+		paused = false;
+		runTime = 0;
+		clock.restart();
+	}
+
+	void reset() {
+		clock.restart();
+		runTime = 0;
+		paused = false;
+	}
+
+	void start() {
+		if (paused) {
+			clock.restart();
+		}
+		paused = false;
+	}
+
+	void pause() {
+		if (!paused) {
+			runTime += clock.getElapsedTime().asSeconds();
+		}
+		paused = true;
+	}
+
+	void toggle() {
+		if (paused) {
+			start();
+		} else {
+			pause();
+		}
+	}
+
+	float getElapsedSeconds() {
+		if (!paused) {
+			return runTime + clock.getElapsedTime().asSeconds();
+		}
+		return runTime;
+	}
+};
+
 int main()
 {
 	map<string, anthill> graph;
@@ -138,7 +189,7 @@ int main()
 		make_pair(300, 350)
 	});
 
-	sf::Clock clock;
+	Timer timer;
 
 	while (window.isOpen())
 	{
@@ -147,6 +198,26 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::KeyPressed) {
+				cout << event.key.code << endl;
+				switch (event.key.code) {
+					case sf::Keyboard::Escape:
+						window.close();
+						break;
+					case sf::Keyboard::Space:
+						timer.toggle();
+						break;
+					// case sf::Keyboard::Right:
+					// 	timer.runTime += 1;
+					// 	break;
+					// case sf::Keyboard::Left:
+					// 	timer.runTime = max(timer.runTime - 1, 0.0f);
+					// 	break;
+					case sf::Keyboard::R:
+						timer.reset();
+						break;
+				}
+			}
 		}
 
 		window.clear(sf::Color(0x937675ff));
@@ -154,7 +225,7 @@ int main()
 		path.draw(window);
 		for (auto &antHill : antHills)
 			antHill.draw(window);
-		ant.draw(window, clock.getElapsedTime().asSeconds() / 2);
+		ant.draw(window, timer.getElapsedSeconds() / 2);
 
 		window.display();
 	}
