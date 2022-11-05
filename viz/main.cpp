@@ -23,6 +23,8 @@ struct Remaper {
 	u64	maxX;
 	u64	minY;
 	u64	maxY;
+	u64 diffX;
+	u64 diffY;
 
 	Remaper(const map<string, anthill> &antsHills) {
 		this->minX = u64_MAX;
@@ -36,12 +38,19 @@ struct Remaper {
 			this->maxX = max(this->maxX, (u64)antHill.second.pos.first);
 			this->maxY = max(this->maxY, (u64)antHill.second.pos.second);
 		}
+
+		this->diffX = this->maxX - this->minX;
+		if (this->diffX == 0)
+			this->diffX = 1;
+		this->diffY = this->maxY - this->minY;
+		if (this->diffY == 0)
+			this->diffY = 1;
 	}
 
 	pair<u64, u64> remap(const pair<u64, u64> &pos) {
 		return make_pair(
-			(pos.first - this->minX) * (SIZE - 2 * MARGIN) / (this->maxX - this->minX) + MARGIN,
-			(pos.second - this->minY) * (SIZE - 2 * MARGIN) / (this->maxY - this->minY) + MARGIN
+			(pos.first - this->minX) * (SIZE - 2 * MARGIN) / this->diffX + MARGIN,
+			(pos.second - this->minY) * (SIZE - 2 * MARGIN) / this->diffY + MARGIN
 		);
 	}
 };

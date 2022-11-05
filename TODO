@@ -1,2 +1,1 @@
 remove printf
-Handle case where anthill are in the same position (division by zero error)
