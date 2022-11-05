@@ -204,6 +204,9 @@ int main()
 		ants.push_back(Ant(seq));
 	}
 
+	sf::Texture backgroundTexture = loadTexture("assets/background.png");
+	sf::Sprite background(backgroundTexture);
+
 	Timer timer;
 
 	while (window.isOpen())
@@ -237,6 +240,7 @@ int main()
 
 		window.clear(sf::Color(0x937675ff));
 
+		window.draw(background);
 		for (auto &path: paths)
 			path.draw(window);
 		for (auto &antHill : antHills)
